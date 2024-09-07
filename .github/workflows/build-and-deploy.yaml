@@ -11,7 +11,7 @@ env:
   IMAGE_NAME: "princed96/danielmorales.me"
 
 jobs:
-  amd64:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
       contents: read
