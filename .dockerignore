@@ -1,0 +1,39 @@
+# Exclude Docker-related files
+Dockerfile
+.dockerignore
+
+# Node.js dependencies
+node_modules
+npm-debug.log
+
+# Next.js build output
+.next
+!.next/static
+!.next/standalone
+
+# Git repository files
+.git
+.gitignore
+
+# IDE and environment-specific files
+**/.DS_Store
+**/.vscode
+**/.vs
+
+# Exclude build artifacts and logs
+bin
+obj
+
+# Local environment files (if applicable)
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Node version management file
+.nvmrc
+
+# Other common exclusions
+LICENSE
+README.md
