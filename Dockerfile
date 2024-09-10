@@ -50,7 +50,7 @@ EXPOSE 3000
 ENV PORT=3000
 
 # Set the hostname to listen on all interfaces
-ENV HOSTNAME="0.0.0.0"
+ENV HOSTNAME="danielmorales.me"
 
 # Command to run the Next.js app
 CMD ["node", "server.js"]
