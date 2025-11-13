@@ -137,11 +137,55 @@
     }
   }
 
+  @keyframes meteor {
+    0% {
+      transform: rotate(215deg) translateX(0);
+      opacity: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      transform: rotate(215deg) translateX(-500px);
+      opacity: 0;
+    }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes orbit {
+    0% {
+      transform: rotate(0deg) translateX(var(--radius)) rotate(calc(-1 * 0deg));
+    }
+    100% {
+      transform: rotate(360deg) translateX(var(--radius)) rotate(calc(-1 * 360deg));
+    }
+  }
+
   .animate-marquee {
     animation: marquee var(--duration) linear infinite;
   }
 
   .animate-marquee-vertical {
     animation: marquee-vertical var(--duration) linear infinite;
+  }
+
+  .animate-meteor {
+    animation: meteor 5s linear infinite;
+  }
+
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  .animate-orbit {
+    animation: orbit var(--duration, 20s) linear infinite;
   }
 }
