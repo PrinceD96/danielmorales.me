@@ -197,3 +197,9 @@ dist
 !.env.example
 .dev.vars*
 !.dev.vars.example
+
+### Package Managers ###
+# Use bun.lock only, ignore npm/yarn/pnpm lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
