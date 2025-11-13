@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "restless-rain-9adc",
+	"name": "danielmorales-me",
 	"main": "./src/worker/index.ts",
 	"compatibility_date": "2025-10-08",
 	"compatibility_flags": [
@@ -47,5 +47,64 @@
 	"assets": {
 		"directory": "./dist/client",
 		"not_found_handling": "single-page-application"
+	},
+	"env": {
+		"development": {
+			"vars": {
+				"ENVIRONMENT": "development"
+			},
+			"ratelimits": [
+				{
+					"name": "RATE_LIMITER",
+					"namespace_id": "99",
+					"simple": { "limit": 99, "period": 60 }
+				}
+			]
+		},
+		"staging": {
+			"routes": [
+				{
+					"pattern": "staging.danielmorales.me",
+					"custom_domain": true
+				}
+			],
+			"vars": {
+				"ENVIRONMENT": "staging"
+			},
+			"ratelimits": [
+				{
+					"name": "RATE_LIMITER",
+					"namespace_id": "5",
+					"simple": { "limit": 5, "period": 60 }
+				}
+			],
+			"observability": {
+				"enabled": true,
+				"head_sampling_rate": 1
+			}
+		},
+		"production": {
+			"routes": [
+				{
+					"pattern": "danielmorales.me",
+					"custom_domain": true
+				}
+			],
+			"vars": {
+				"ENVIRONMENT": "production"
+			},
+			"ratelimits": [
+				{
+					"name": "RATE_LIMITER",
+					"namespace_id": "3",
+					"simple": { "limit": 3, "period": 60 }
+				}
+			],
+			"minify": true,
+			"observability": {
+				"enabled": true,
+				"head_sampling_rate": 0.1
+			}
+		}
 	}
 }
