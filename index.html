@@ -1,10 +1,44 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 	<head>
 		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Vite + React + TS</title>
+		
+		<!-- SEO Meta -->
+		<title>Daniel Morales — Software Engineer</title>
+		<meta name="description" content="Daniel Morales is a software engineer building systems that scale, teams that ship, and products that matter." />
+		<meta name="author" content="Daniel Morales" />
+		
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="Daniel Morales — Software Engineer" />
+		<meta property="og:description" content="Building systems that scale, teams that ship, and products that matter." />
+		<meta property="og:url" content="https://danielmorales.me" />
+		
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Daniel Morales — Software Engineer" />
+		<meta name="twitter:description" content="Building systems that scale, teams that ship, and products that matter." />
+		
+		<!-- Fonts: Instrument Serif (editorial headlines) + Geist Sans (modern body) + Geist Mono (code) -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+		
+		<!-- Geist fonts from Vercel CDN -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-sans/style.min.css" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@1.3.1/dist/fonts/geist-mono/style.min.css" />
+		
+		<!-- Prevent FOUC for theme -->
+		<script>
+			(function() {
+				const stored = localStorage.getItem('theme');
+				const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+				const theme = stored || (prefersDark ? 'dark' : 'light');
+				document.documentElement.classList.toggle('dark', theme === 'dark');
+			})();
+		</script>
 	</head>
 
 	<body>
