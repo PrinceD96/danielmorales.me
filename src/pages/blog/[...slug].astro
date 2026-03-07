@@ -2,29 +2,29 @@
 import { getCollection, render } from "astro:content";
 import PostLayout from "@/layouts/PostLayout.astro";
 
-const { slug } = Astro.params;
+export const prerender = true;
 
-const posts = await getCollection("posts", ({ data }) => {
-  return import.meta.env.PROD ? !data.draft : true;
-});
+export async function getStaticPaths() {
+  const posts = await getCollection("posts", ({ data }) => {
+    return import.meta.env.PROD ? !data.draft : true;
+  });
 
-// Sort by date descending (newest first)
-const sorted = posts.sort(
-  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
-);
+  const sorted = posts.sort(
+    (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+  );
 
-const currentIndex = sorted.findIndex((p) => p.id === slug);
-const post = sorted[currentIndex];
-
-if (!post) {
-  return Astro.redirect("/404");
+  return sorted.map((post, i) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      prevPost: i < sorted.length - 1 ? sorted[i + 1] : undefined,
+      nextPost: i > 0 ? sorted[i - 1] : undefined,
+    },
+  }));
 }
 
+const { post, prevPost, nextPost } = Astro.props;
 const { Content } = await render(post);
-
-// Adjacent posts for next/prev nav
-const prevPost = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : undefined;
-const nextPost = currentIndex > 0 ? sorted[currentIndex - 1] : undefined;
 ---
 
 <PostLayout

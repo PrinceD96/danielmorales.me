@@ -15,7 +15,7 @@ export default defineConfig({
   }),
   integrations: [
     react(),
-    mdx(),
+    mdx({ optimize: true }),
     sitemap(),
   ],
   vite: {
