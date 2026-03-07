@@ -185,7 +185,7 @@
 
 @layer components {
   .prose {
-    @apply max-w-prose text-foreground font-mono;
+    @apply text-foreground font-mono;
     font-size: 1.0625rem;
     line-height: 1.8;
   }
