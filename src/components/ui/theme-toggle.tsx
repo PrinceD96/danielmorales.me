@@ -1,32 +1,57 @@
-import { useTheme } from "@/providers/theme-provider";
+import { useState, useEffect } from "react";
 import { Moon, Sun } from "lucide-react";
 
-export function ThemeToggle() {
-	const { theme, toggleTheme } = useTheme();
+function ThemeToggle() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [mounted, setMounted] = useState(false);
 
-	return (
-		<button
-			onClick={toggleTheme}
-			className="relative w-10 h-10 rounded-full flex items-center justify-center
-				text-muted-foreground hover:text-foreground
-				hover:bg-secondary/80 transition-all duration-300
-				focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-			aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-		>
-			<Sun
-				className={`h-5 w-5 absolute transition-all duration-300 ${
-					theme === "light"
-						? "rotate-0 scale-100 opacity-100"
-						: "rotate-90 scale-0 opacity-0"
-				}`}
-			/>
-			<Moon
-				className={`h-5 w-5 absolute transition-all duration-300 ${
-					theme === "dark"
-						? "rotate-0 scale-100 opacity-100"
-						: "-rotate-90 scale-0 opacity-0"
-				}`}
-			/>
-		</button>
-	);
+  useEffect(() => {
+    setMounted(true);
+    const isDark = document.documentElement.classList.contains("dark");
+    setTheme(isDark ? "dark" : "light");
+  }, []);
+
+  function toggle() {
+    const next = theme === "light" ? "dark" : "light";
+    setTheme(next);
+    document.documentElement.classList.toggle("dark", next === "dark");
+    localStorage.setItem("theme", next);
+  }
+
+  // Prevent hydration mismatch — render nothing until mounted
+  if (!mounted) {
+    return (
+      <button
+        className="relative flex size-9 items-center justify-center rounded-md text-muted-foreground"
+        aria-label="Toggle theme"
+      >
+        <span className="size-4" />
+      </button>
+    );
+  }
+
+  return (
+    <button
+      onClick={toggle}
+      className="relative flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+    >
+      <Sun
+        className={`size-4 absolute transition-all duration-300 ${
+          theme === "light"
+            ? "rotate-0 scale-100 opacity-100"
+            : "rotate-90 scale-0 opacity-0"
+        }`}
+      />
+      <Moon
+        className={`size-4 absolute transition-all duration-300 ${
+          theme === "dark"
+            ? "rotate-0 scale-100 opacity-100"
+            : "-rotate-90 scale-0 opacity-0"
+        }`}
+      />
+    </button>
+  );
 }
+
+export { ThemeToggle };

@@ -1,0 +1,63 @@
+---
+import { ClientRouter } from "astro:transitions";
+import { siteConfig } from "@/config/site";
+import SEO from "@/components/seo/SEO.astro";
+import JsonLdWebsite from "@/components/seo/JsonLdWebsite.astro";
+import Header from "@/components/layout/Header.astro";
+import Footer from "@/components/layout/Footer.astro";
+import "@/styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  publishedAt?: string;
+  updatedAt?: string;
+  tags?: string[];
+  canonicalUrl?: string;
+  socialTitle?: string;
+  socialDescription?: string;
+  noindex?: boolean;
+}
+
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={siteConfig.name} href="/rss.xml" />
+
+    <SEO {...props} />
+    <JsonLdWebsite />
+    <ClientRouter />
+
+    <!-- Theme: prevent FOUC -->
+    <script is:inline>
+      function applyTheme() {
+        var stored = localStorage.getItem("theme");
+        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (stored === "dark" || (!stored && prefersDark)) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      }
+      document.addEventListener("astro:after-swap", applyTheme);
+      applyTheme();
+    </script>
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <Header />
+    <main class="flex-1" transition:animate="fade">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,43 @@
+---
+import { siteConfig } from "@/config/site";
+
+interface Props {
+  title: string;
+  description: string;
+  publishedAt: string;
+  updatedAt?: string;
+  tags?: string[];
+  image?: string;
+  slug: string;
+}
+
+const { title, description, publishedAt, updatedAt, tags, image, slug } = Astro.props;
+const url = `${siteConfig.url}/blog/${slug}`;
+---
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: title,
+    description,
+    url,
+    datePublished: publishedAt,
+    ...(updatedAt && { dateModified: updatedAt }),
+    ...(image && { image: new URL(image, siteConfig.url).href }),
+    ...(tags && { keywords: tags.join(", ") }),
+    author: {
+      "@type": "Person",
+      "@id": `${siteConfig.url}/#person`,
+      name: siteConfig.author.name,
+    },
+    publisher: {
+      "@type": "Person",
+      "@id": `${siteConfig.url}/#person`,
+    },
+    isPartOf: {
+      "@id": `${siteConfig.url}/#website`,
+    },
+  })}
+/>

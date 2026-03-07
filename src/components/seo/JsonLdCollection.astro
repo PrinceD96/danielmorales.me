@@ -1,0 +1,39 @@
+---
+import { siteConfig } from "@/config/site";
+
+interface Props {
+  items: Array<{
+    title: string;
+    url: string;
+    position: number;
+  }>;
+  name: string;
+  description: string;
+}
+
+const { items, name, description } = Astro.props;
+---
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name,
+    description,
+    url: `${siteConfig.url}/blog`,
+    isPartOf: {
+      "@id": `${siteConfig.url}/#website`,
+    },
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: items.length,
+      itemListElement: items.map((item) => ({
+        "@type": "ListItem",
+        position: item.position,
+        url: item.url,
+        name: item.title,
+      })),
+    },
+  })}
+/>

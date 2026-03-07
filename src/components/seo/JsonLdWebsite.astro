@@ -1,0 +1,32 @@
+---
+import { siteConfig } from "@/config/site";
+---
+
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": `${siteConfig.url}/#person`,
+        name: siteConfig.author.name,
+        url: siteConfig.url,
+        sameAs: [
+          siteConfig.social.github,
+          siteConfig.social.linkedin,
+        ],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${siteConfig.url}/#website`,
+        url: siteConfig.url,
+        name: siteConfig.name,
+        description: siteConfig.description,
+        publisher: {
+          "@id": `${siteConfig.url}/#person`,
+        },
+      },
+    ],
+  })}
+/>

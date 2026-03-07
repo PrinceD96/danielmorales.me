@@ -1,0 +1,35 @@
+---
+interface Props {
+  tags: string[];
+  activeTag?: string;
+}
+
+const { tags, activeTag } = Astro.props;
+---
+
+{tags.length > 0 && (
+  <div class="flex flex-wrap gap-2">
+    <a
+      href="/blog"
+      class={`text-xs transition-colors ${
+        !activeTag
+          ? "text-primary"
+          : "text-muted-foreground hover:text-foreground"
+      }`}
+    >
+      # all
+    </a>
+    {tags.map((tag) => (
+      <a
+        href={`/blog?tag=${encodeURIComponent(tag)}`}
+        class={`text-xs transition-colors ${
+          activeTag === tag
+            ? "text-primary"
+            : "text-muted-foreground hover:text-foreground"
+        }`}
+      >
+        # {tag}
+      </a>
+    ))}
+  </div>
+)}

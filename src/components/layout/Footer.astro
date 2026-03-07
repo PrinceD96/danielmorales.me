@@ -1,0 +1,64 @@
+---
+import { siteConfig } from "@/config/site";
+import GitHub from "@/components/icons/GitHub.astro";
+import X from "@/components/icons/X.astro";
+import LinkedIn from "@/components/icons/LinkedIn.astro";
+import Email from "@/components/icons/Email.astro";
+import RSS from "@/components/icons/RSS.astro";
+---
+
+<footer>
+  <div class="mx-auto max-w-4xl px-6">
+    <hr class="border-border" />
+    <div class="flex items-center justify-between py-8">
+      <p class="text-xs text-muted-foreground/60">
+        &copy; {new Date().getFullYear()}
+      </p>
+
+      <!-- Social links -->
+      <div class="flex items-center gap-1">
+        <a
+          href={siteConfig.social.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-icon"
+          aria-label="GitHub"
+        >
+          <GitHub size={18} />
+        </a>
+        <a
+          href={siteConfig.social.x}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-icon"
+          aria-label="X"
+        >
+          <X size={18} />
+        </a>
+        <a
+          href={siteConfig.social.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-icon"
+          aria-label="LinkedIn"
+        >
+          <LinkedIn size={18} />
+        </a>
+        <a
+          href={`mailto:${siteConfig.social.email}`}
+          class="social-icon"
+          aria-label="Email"
+        >
+          <Email size={18} />
+        </a>
+        <a
+          href="/rss.xml"
+          class="social-icon"
+          aria-label="RSS Feed"
+        >
+          <RSS size={18} />
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,46 @@
+---
+import { getCollection, render } from "astro:content";
+import PostLayout from "@/layouts/PostLayout.astro";
+
+const { slug } = Astro.params;
+
+const posts = await getCollection("posts", ({ data }) => {
+  return import.meta.env.PROD ? !data.draft : true;
+});
+
+// Sort by date descending (newest first)
+const sorted = posts.sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime()
+);
+
+const currentIndex = sorted.findIndex((p) => p.id === slug);
+const post = sorted[currentIndex];
+
+if (!post) {
+  return Astro.redirect("/404");
+}
+
+const { Content } = await render(post);
+
+// Adjacent posts for next/prev nav
+const prevPost = currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : undefined;
+const nextPost = currentIndex > 0 ? sorted[currentIndex - 1] : undefined;
+---
+
+<PostLayout
+  title={post.data.title}
+  description={post.data.description}
+  publishedAt={post.data.publishedAt}
+  updatedAt={post.data.updatedAt}
+  tags={post.data.tags}
+  coverImage={post.data.coverImage}
+  slug={post.id}
+  body={post.body ?? ""}
+  canonicalUrl={post.data.canonicalUrl}
+  socialTitle={post.data.socialTitle}
+  socialDescription={post.data.socialDescription}
+  prevPost={prevPost ? { title: prevPost.data.title, slug: prevPost.id } : undefined}
+  nextPost={nextPost ? { title: nextPost.data.title, slug: nextPost.id } : undefined}
+>
+  <Content />
+</PostLayout>

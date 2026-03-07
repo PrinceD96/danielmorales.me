@@ -1,0 +1,6 @@
+# https://danielmorales.me
+
+User-agent: *
+Allow: /
+
+Sitemap: https://danielmorales.me/sitemap-index.xml

@@ -1,0 +1,74 @@
+---
+import { siteConfig } from "@/config/site";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 bg-background">
+  <nav class="mx-auto flex max-w-4xl items-center justify-between px-6 py-3.5">
+    <a
+      href="/"
+      class="text-lg tracking-tight text-foreground transition-colors duration-200 hover:text-primary"
+    >
+      {siteConfig.name}
+    </a>
+
+    <div class="flex items-center gap-1">
+      {siteConfig.nav.map((item) => {
+        const isActive = currentPath === item.href || currentPath.startsWith(item.href + "/");
+        return (
+          <a
+            href={item.href}
+            class:list={[
+              "px-3 py-1.5 text-sm transition-colors duration-200",
+              isActive
+                ? "text-foreground font-medium"
+                : "text-muted-foreground hover:text-foreground",
+            ]}
+            aria-current={isActive ? "page" : undefined}
+          >
+            {item.label}
+          </a>
+        );
+      })}
+      <ThemeToggle client:load transition:persist />
+    </div>
+  </nav>
+  <div class="mx-auto max-w-4xl px-6">
+    <hr class="border-border" />
+  </div>
+  <!-- Reading progress bar -->
+  <div
+    id="reading-progress"
+    class="h-0.5 origin-left bg-primary transition-opacity duration-300"
+    style="transform: scaleX(0); opacity: 0;"
+  ></div>
+</header>
+
+<script>
+  function initProgress() {
+    const bar = document.getElementById("reading-progress");
+    if (!bar) return;
+
+    const update = () => {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight <= 0) {
+        bar.style.opacity = "0";
+        return;
+      }
+      const pct = Math.min(window.scrollY / docHeight, 1);
+      bar.style.transform = `scaleX(${pct})`;
+      bar.style.opacity = window.scrollY > 80 ? "1" : "0";
+    };
+
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  }
+
+  // Run on initial load
+  initProgress();
+
+  // Re-run after view transitions
+  document.addEventListener("astro:after-swap", initProgress);
+</script>

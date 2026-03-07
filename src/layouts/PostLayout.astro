@@ -1,0 +1,285 @@
+---
+import Layout from "./Layout.astro";
+import JsonLdBlogPosting from "@/components/seo/JsonLdBlogPosting.astro";
+import JsonLdBreadcrumb from "@/components/seo/JsonLdBreadcrumb.astro";
+import { siteConfig } from "@/config/site";
+import { readingTimeText } from "@/lib/reading-time";
+import { Clock, ArrowLeft, ArrowRight, Copy, ChevronUp } from "@lucide/astro";
+import LinkedIn from "@/components/icons/LinkedIn.astro";
+import X from "@/components/icons/X.astro";
+
+interface AdjacentPost {
+  title: string;
+  slug: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  publishedAt: Date;
+  updatedAt?: Date;
+  tags?: string[];
+  coverImage?: string;
+  slug: string;
+  body?: string;
+  canonicalUrl?: string;
+  socialTitle?: string;
+  socialDescription?: string;
+  prevPost?: AdjacentPost;
+  nextPost?: AdjacentPost;
+}
+
+const {
+  title,
+  description,
+  publishedAt,
+  updatedAt,
+  tags,
+  coverImage,
+  slug,
+  body,
+  canonicalUrl,
+  socialTitle,
+  socialDescription,
+  prevPost,
+  nextPost,
+} = Astro.props;
+
+const formattedDate = publishedAt.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const updatedDate = updatedAt?.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const readTime = body ? readingTimeText(body) : undefined;
+const postUrl = `${siteConfig.url}/blog/${slug}`;
+const linkedInShareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(postUrl)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(description)}`;
+const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(title)}`;
+---
+
+<Layout
+  title={title}
+  description={description}
+  type="article"
+  publishedAt={publishedAt.toISOString()}
+  updatedAt={updatedAt?.toISOString()}
+  tags={tags}
+  image={coverImage}
+  canonicalUrl={canonicalUrl}
+  socialTitle={socialTitle}
+  socialDescription={socialDescription}
+>
+  <JsonLdBlogPosting
+    title={title}
+    description={description}
+    publishedAt={publishedAt.toISOString()}
+    updatedAt={updatedAt?.toISOString()}
+    tags={tags}
+    image={coverImage}
+    slug={slug}
+  />
+  <JsonLdBreadcrumb
+    items={[
+      { name: "Blog", url: "/blog" },
+      { name: title, url: `/blog/${slug}` },
+    ]}
+  />
+
+  <article class="py-16 sm:py-24">
+    <div class="mx-auto max-w-2xl px-6">
+      <!-- Header -->
+      <header class="mb-12 animate-slide-up">
+        <a
+          href="/blog"
+          class="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
+        >
+          <ArrowLeft size={14} />
+          Blog
+        </a>
+
+        <!-- Meta row: date, reading time -->
+        <div class="mb-6 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+          <time datetime={publishedAt.toISOString()}>{formattedDate}</time>
+          {updatedDate && (
+            <>
+              <span class="size-1 rounded-full bg-muted-foreground/40" />
+              <span>Updated {updatedDate}</span>
+            </>
+          )}
+          {readTime && (
+            <>
+              <span class="size-1 rounded-full bg-muted-foreground/40" />
+              <span class="inline-flex items-center gap-1.5">
+                <Clock size={14} />
+                {readTime}
+              </span>
+            </>
+          )}
+        </div>
+
+        <!-- Title -->
+        <h1
+          class="text-3xl font-light leading-[1.15] sm:text-4xl lg:text-5xl"
+          transition:name={`post-title-${slug}`}
+        >
+          {title}
+        </h1>
+
+        <!-- Tags as links -->
+        {tags && tags.length > 0 && (
+          <div class="mt-6 flex flex-wrap gap-2">
+            {tags.map((tag) => (
+              <a
+                href={`/blog?tag=${encodeURIComponent(tag)}`}
+                class="text-xs text-muted-foreground transition-colors duration-200 hover:text-primary"
+              >
+                # {tag}
+              </a>
+            ))}
+          </div>
+        )}
+      </header>
+
+      <!-- Content -->
+      <div class="prose animate-fade-in" style="animation-delay: 0.1s;">
+        <slot />
+      </div>
+
+      <!-- Share buttons -->
+      <div class="mt-14 flex items-center gap-3">
+        <span class="text-sm text-muted-foreground">Share</span>
+        <a
+          href={xShareUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="share-btn"
+          aria-label="Share on X"
+        >
+          <X size={16} />
+        </a>
+        <a
+          href={linkedInShareUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="share-btn"
+          aria-label="Share on LinkedIn"
+        >
+          <LinkedIn size={18} />
+        </a>
+        <button
+          type="button"
+          class="share-btn"
+          aria-label="Copy link to clipboard"
+          data-copy-url={postUrl}
+          id="copy-link-btn"
+        >
+          <Copy size={18} />
+        </button>
+      </div>
+
+      <!-- Prev / Next navigation -->
+      {(prevPost || nextPost) && (
+        <nav class="mt-12 grid gap-4 sm:grid-cols-2" aria-label="Adjacent posts">
+          {prevPost ? (
+            <a
+              href={`/blog/${prevPost.slug}`}
+              class="group flex flex-col gap-2 rounded-xl border border-border p-5 transition-all duration-200 hover:border-primary/20 hover:bg-card hover:shadow-sm"
+            >
+              <span class="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors group-hover:text-primary">
+                <ArrowLeft size={14} />
+                Previous
+              </span>
+              <span class="text-sm font-medium leading-snug text-foreground line-clamp-2">
+                {prevPost.title}
+              </span>
+            </a>
+          ) : (
+            <div />
+          )}
+          {nextPost ? (
+            <a
+              href={`/blog/${nextPost.slug}`}
+              class="group flex flex-col items-end gap-2 rounded-xl border border-border p-5 text-right transition-all duration-200 hover:border-primary/20 hover:bg-card hover:shadow-sm"
+            >
+              <span class="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors group-hover:text-primary">
+                Next
+                <ArrowRight size={14} />
+              </span>
+              <span class="text-sm font-medium leading-snug text-foreground line-clamp-2">
+                {nextPost.title}
+              </span>
+            </a>
+          ) : (
+            <div />
+          )}
+        </nav>
+      )}
+    </div>
+
+    <!-- Back to Top -->
+    <button
+      type="button"
+      id="back-to-top"
+      class="fixed bottom-6 right-6 z-40 flex size-10 items-center justify-center rounded-full border border-border bg-background/80 text-muted-foreground opacity-0 shadow-sm backdrop-blur-sm transition-all duration-300 hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      aria-label="Back to top"
+    >
+      <ChevronUp size={18} />
+    </button>
+  </article>
+</Layout>
+
+<script>
+  // Copy link to clipboard
+  document.getElementById("copy-link-btn")?.addEventListener("click", async (e) => {
+    const btn = e.currentTarget as HTMLButtonElement;
+    const url = btn.dataset.copyUrl;
+    if (!url) return;
+
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      const input = document.createElement("input");
+      input.value = url;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand("copy");
+      document.body.removeChild(input);
+    }
+
+    // Swap to checkmark
+    const original = btn.innerHTML;
+    btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
+    btn.classList.add("text-primary", "border-primary/40");
+    setTimeout(() => {
+      btn.innerHTML = original;
+      btn.classList.remove("text-primary", "border-primary/40");
+    }, 2000);
+  });
+
+  // Back to top button visibility + scroll
+  const backToTop = document.getElementById("back-to-top");
+  if (backToTop) {
+    const toggle = () => {
+      if (window.scrollY > 400) {
+        backToTop.classList.remove("opacity-0", "pointer-events-none");
+        backToTop.classList.add("opacity-100");
+      } else {
+        backToTop.classList.add("opacity-0", "pointer-events-none");
+        backToTop.classList.remove("opacity-100");
+      }
+    };
+
+    window.addEventListener("scroll", toggle, { passive: true });
+    toggle();
+
+    backToTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+</script>
