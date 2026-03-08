@@ -290,11 +290,11 @@
     @apply hover:text-primary hover:rotate-[-8deg];
   }
 
-  /* Share button base */
+  /* Share button base — ghost pattern */
   .share-btn {
     @apply inline-flex size-10 items-center justify-center rounded-full border border-border text-muted-foreground;
-    @apply transition-all duration-200;
-    @apply hover:bg-accent hover:text-foreground hover:border-foreground/20 cursor-pointer;
+    @apply transition-all duration-200 cursor-pointer;
+    @apply hover:bg-muted hover:text-foreground dark:hover:bg-muted/50;
   }
 }
 

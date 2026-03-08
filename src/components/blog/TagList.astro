@@ -14,7 +14,7 @@ const { tags, activeTag } = Astro.props;
       class={`text-xs transition-colors ${
         !activeTag
           ? "text-primary"
-          : "text-muted-foreground hover:text-foreground"
+          : "text-muted-foreground hover:text-primary"
       }`}
     >
       # all
@@ -25,7 +25,7 @@ const { tags, activeTag } = Astro.props;
         class={`text-xs transition-colors ${
           activeTag === tag
             ? "text-primary"
-            : "text-muted-foreground hover:text-foreground"
+            : "text-muted-foreground hover:text-primary"
         }`}
       >
         # {tag}
