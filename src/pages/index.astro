@@ -24,14 +24,14 @@ const recentPosts = sorted.slice(0, 10);
 
 <Layout>
   <!-- Intro -->
-  <section class="pt-12 pb-4 sm:pt-16 sm:pb-6">
+  <section class="pb-4 sm:pb-6">
     <div class="mx-auto max-w-4xl px-6">
       <div class="flex flex-col items-center gap-8 text-center sm:flex-row sm:items-center sm:gap-12 sm:text-left">
         <div class="relative shrink-0">
           <Image
             src={danielImage}
             alt={siteConfig.name}
-            class="h-40 w-40 rounded-full object-cover shadow-xl ring-2 ring-background dark:ring-white/10"
+            class="h-40 w-40 rounded-full object-cover shadow-xl border-2 border-background dark:border-white/10"
             width={320}
             height={320}
             loading="eager"
@@ -68,7 +68,7 @@ const recentPosts = sorted.slice(0, 10);
   </section>
 
   <!-- Posts -->
-  <section class="pt-8 pb-12 sm:pt-10 sm:pb-16">
+  <section class="pt-8 pb-12 sm:pb-16">
     <div class="mx-auto max-w-4xl px-6">
       <div class="space-y-10">
         {recentPosts.map((post) => {
