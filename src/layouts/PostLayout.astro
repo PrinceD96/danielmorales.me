@@ -103,8 +103,16 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
           Blog
         </a>
 
+        <!-- Title -->
+        <h1
+          class="text-3xl font-bold leading-[1.15] text-primary sm:text-4xl lg:text-5xl"
+          transition:name={`post-title-${slug}`}
+        >
+          {title}
+        </h1>
+
         <!-- Meta row: date, reading time -->
-        <div class="mb-6 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+        <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
           <time datetime={publishedAt.toISOString()}>{formattedDate}</time>
           {updatedDate && (
             <>
@@ -122,34 +130,26 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
             </>
           )}
         </div>
-
-        <!-- Title -->
-        <h1
-          class="text-3xl font-light leading-[1.15] sm:text-4xl lg:text-5xl"
-          transition:name={`post-title-${slug}`}
-        >
-          {title}
-        </h1>
-
-        <!-- Tags as links -->
-        {tags && tags.length > 0 && (
-          <div class="mt-6 flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <a
-                href={`/blog?tag=${encodeURIComponent(tag)}`}
-                class="text-xs text-muted-foreground transition-colors duration-200 hover:text-primary"
-              >
-                # {tag}
-              </a>
-            ))}
-          </div>
-        )}
       </header>
 
       <!-- Content -->
       <div class="prose animate-fade-in" style="animation-delay: 0.1s;">
         <slot />
       </div>
+
+      <!-- Tags -->
+      {tags && tags.length > 0 && (
+        <div class="mt-10 flex flex-wrap gap-2">
+          {tags.map((tag) => (
+            <a
+              href={`/blog/tag/${encodeURIComponent(tag)}`}
+              class="text-xs text-muted-foreground transition-colors duration-200 hover:text-primary"
+            >
+              # {tag}
+            </a>
+          ))}
+        </div>
+      )}
 
       <!-- Share buttons -->
       <div class="mt-14 flex items-center gap-3">
@@ -189,13 +189,13 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
           {prevPost ? (
             <a
               href={`/blog/${prevPost.slug}`}
-              class="group flex flex-col gap-2 rounded-xl border border-border p-5 transition-all duration-200 hover:border-primary/20 hover:bg-card hover:shadow-sm"
+              class="group flex flex-col gap-1 transition-colors duration-200"
             >
-              <span class="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors group-hover:text-primary">
+              <span class="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors group-hover:text-foreground">
                 <ArrowLeft size={14} />
                 Previous
               </span>
-              <span class="text-sm font-medium leading-snug text-foreground line-clamp-2">
+              <span class="text-sm font-medium leading-snug text-foreground transition-colors group-hover:text-primary line-clamp-2">
                 {prevPost.title}
               </span>
             </a>
@@ -205,13 +205,13 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
           {nextPost ? (
             <a
               href={`/blog/${nextPost.slug}`}
-              class="group flex flex-col items-end gap-2 rounded-xl border border-border p-5 text-right transition-all duration-200 hover:border-primary/20 hover:bg-card hover:shadow-sm"
+              class="group flex flex-col items-end gap-1 text-right transition-colors duration-200"
             >
-              <span class="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors group-hover:text-primary">
+              <span class="inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors group-hover:text-foreground">
                 Next
                 <ArrowRight size={14} />
               </span>
-              <span class="text-sm font-medium leading-snug text-foreground line-clamp-2">
+              <span class="text-sm font-medium leading-snug text-foreground transition-colors group-hover:text-primary line-clamp-2">
                 {nextPost.title}
               </span>
             </a>

@@ -7,35 +7,47 @@ import TagList from "@/components/blog/TagList.astro";
 import { siteConfig } from "@/config/site";
 import { readingTimeText } from "@/lib/reading-time";
 
-const posts = await getCollection("posts", ({ data }) => {
-  return import.meta.env.PROD ? !data.draft : true;
-});
+export async function getStaticPaths() {
+  const posts = await getCollection("posts", ({ data }) => {
+    return import.meta.env.PROD ? !data.draft : true;
+  });
+  const allTags = [...new Set(posts.flatMap((p) => p.data.tags))];
 
-const sorted = posts.sort(
-  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
-);
+  return allTags.map((tag) => {
+    const filtered = posts
+      .filter((p) => p.data.tags.includes(tag))
+      .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime());
+    return {
+      params: { tag },
+      props: { posts: filtered, allTags: allTags.sort(), tag },
+    };
+  });
+}
 
-// Collect all unique tags
-const allTags = [...new Set(sorted.flatMap((p) => p.data.tags))].sort();
+const { posts: filtered, allTags, tag } = Astro.props;
 
-// JSON-LD items
-const collectionItems = sorted.map((post, i) => ({
+const collectionItems = filtered.map((post, i) => ({
   title: post.data.title,
   url: `${siteConfig.url}/blog/${post.id}`,
   position: i + 1,
 }));
+
+const tagTitle = `Posts tagged "${tag}"`;
+const tagDescription = `Essays tagged "${tag}" — ${filtered.length} post${filtered.length === 1 ? "" : "s"}.`;
 ---
 
-<Layout
-  title="Blog"
-  description="Essays on building software products, engineering decisions, and the craft of shipping useful things."
->
+<Layout title={tagTitle} description={tagDescription}>
   <JsonLdCollection
-    name="Blog"
-    description="Essays on building software products, engineering decisions, and the craft of shipping useful things."
+    name={tagTitle}
+    description={tagDescription}
     items={collectionItems}
   />
-  <JsonLdBreadcrumb items={[{ name: "Blog", url: "/blog" }]} />
+  <JsonLdBreadcrumb
+    items={[
+      { name: "Blog", url: "/blog" },
+      { name: `# ${tag}`, url: `/blog/tag/${tag}` },
+    ]}
+  />
 
   <section class="py-8 sm:py-12">
     <div class="mx-auto max-w-4xl px-6">
@@ -48,13 +60,13 @@ const collectionItems = sorted.map((post, i) => ({
 
       {allTags.length > 0 && (
         <div class="mb-10">
-          <TagList tags={allTags} />
+          <TagList tags={allTags} activeTag={tag} />
         </div>
       )}
 
-      {sorted.length > 0 ? (
+      {filtered.length > 0 ? (
         <div class="space-y-10">
-          {sorted.map((post) => {
+          {filtered.map((post) => {
             const { title, description, publishedAt, tags } = post.data;
             const formattedDate = publishedAt.toLocaleDateString("en-US", {
               day: "numeric",
@@ -82,12 +94,12 @@ const collectionItems = sorted.map((post, i) => ({
                     {tags && tags.length > 0 && (
                       <>
                         <span>&middot;</span>
-                        {tags.map((tag) => (
+                        {tags.map((t) => (
                           <a
-                            href={`/blog/tag/${encodeURIComponent(tag)}`}
-                            class="transition-colors hover:text-primary"
+                            href={`/blog/tag/${encodeURIComponent(t)}`}
+                            class={`transition-colors hover:text-primary ${t === tag ? "text-primary" : ""}`}
                           >
-                            # {tag}
+                            # {t}
                           </a>
                         ))}
                       </>

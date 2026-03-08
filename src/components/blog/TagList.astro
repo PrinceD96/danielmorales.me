@@ -21,7 +21,7 @@ const { tags, activeTag } = Astro.props;
     </a>
     {tags.map((tag) => (
       <a
-        href={`/blog?tag=${encodeURIComponent(tag)}`}
+        href={`/blog/tag/${encodeURIComponent(tag)}`}
         class={`text-xs transition-colors ${
           activeTag === tag
             ? "text-primary"
