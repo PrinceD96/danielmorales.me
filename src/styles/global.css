@@ -285,9 +285,15 @@
 @layer components {
   /* Social icon link base */
   .social-icon {
-    @apply inline-flex size-9 items-center justify-center text-muted-foreground;
+    @apply inline-flex size-9 items-center justify-center text-muted-foreground relative;
     transition: color 0.2s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     @apply hover:text-primary hover:rotate-[-8deg];
+  }
+
+  /* Transparent overlay prevents hover re-triggers from SVG gaps */
+  .social-icon::before {
+    content: "";
+    @apply absolute inset-0;
   }
 
   /* Share button base — ghost pattern */

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Moon, Sun } from "lucide-react";
+import { playSound } from "@/lib/sounds";
 
 function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -16,13 +17,14 @@ function ThemeToggle() {
     setTheme(next);
     document.documentElement.classList.toggle("dark", next === "dark");
     localStorage.setItem("theme", next);
+    playSound(next === "dark" ? "toggle-on" : "toggle-off");
   }
 
   // Prevent hydration mismatch — render nothing until mounted
   if (!mounted) {
     return (
       <button
-        className="relative flex size-9 items-center justify-center rounded-md text-muted-foreground"
+        className="relative flex size-9 items-center justify-center rounded-md text-muted-foreground cursor-pointer"
         aria-label="Toggle theme"
       >
         <span className="size-4" />
@@ -33,7 +35,7 @@ function ThemeToggle() {
   return (
     <button
       onClick={toggle}
-      className="relative flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground dark:hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="relative flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors duration-200 cursor-pointer hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
     >
       <Sun

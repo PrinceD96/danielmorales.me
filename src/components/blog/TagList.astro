@@ -11,6 +11,7 @@ const { tags, activeTag } = Astro.props;
   <div class="flex flex-wrap gap-2">
     <a
       href="/blog"
+      data-sound="click"
       class={`text-xs transition-colors ${
         !activeTag
           ? "text-primary"
@@ -22,6 +23,7 @@ const { tags, activeTag } = Astro.props;
     {tags.map((tag) => (
       <a
         href={`/blog/tag/${encodeURIComponent(tag)}`}
+        data-sound="click"
         class={`text-xs transition-colors ${
           activeTag === tag
             ? "text-primary"

@@ -64,7 +64,7 @@ const collectionItems = sorted.map((post, i) => ({
             const readTime = post.body ? readingTimeText(post.body) : undefined;
             return (
               <article>
-                <a href={`/blog/${post.id}`} class="group block">
+                <a href={`/blog/${post.id}`} class="group block" data-sound="navigate">
                   <h2
                     class="text-xl font-medium leading-snug text-primary decoration-dashed underline-offset-4 transition-all duration-200 group-hover:underline group-hover:decoration-primary/30 sm:text-2xl"
                     transition:name={`post-title-${post.id}`}

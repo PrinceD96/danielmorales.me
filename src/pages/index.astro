@@ -45,19 +45,19 @@ const recentPosts = sorted.slice(0, 10);
             {siteConfig.description}
           </p>
           <div class="mt-4 flex items-center justify-center gap-1 sm:justify-start">
-            <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub">
+            <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub" data-sound="click" data-sound-hover="hover-tick">
               <GitHub size={18} />
             </a>
-            <a href={siteConfig.social.x} target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="X">
+            <a href={siteConfig.social.x} target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="X" data-sound="click" data-sound-hover="hover-tick">
               <X size={18} />
             </a>
-            <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn">
+            <a href={siteConfig.social.linkedin} target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn" data-sound="click" data-sound-hover="hover-tick">
               <LinkedIn size={18} />
             </a>
-            <a href={`mailto:${siteConfig.social.email}`} class="social-icon" aria-label="Email">
+            <a href={`mailto:${siteConfig.social.email}`} class="social-icon" aria-label="Email" data-sound="click" data-sound-hover="hover-tick">
               <Email size={18} />
             </a>
-            <a href="/rss.xml" class="social-icon" aria-label="RSS Feed">
+            <a href="/rss.xml" class="social-icon" aria-label="RSS Feed" data-sound="click" data-sound-hover="hover-tick">
               <RSS size={18} />
             </a>
           </div>
@@ -81,7 +81,7 @@ const recentPosts = sorted.slice(0, 10);
           const readTime = post.body ? readingTimeText(post.body) : undefined;
           return (
             <article>
-              <a href={`/blog/${post.id}`} class="group block">
+              <a href={`/blog/${post.id}`} class="group block" data-sound="navigate">
                 <h2
                   class="text-xl font-medium leading-snug text-primary decoration-dashed underline-offset-4 transition-all duration-200 group-hover:underline group-hover:decoration-primary/30 sm:text-2xl"
                   transition:name={`post-title-${post.id}`}
@@ -111,6 +111,7 @@ const recentPosts = sorted.slice(0, 10);
           <a
             href="/blog"
             class="text-sm text-muted-foreground transition-colors hover:text-primary"
+            data-sound="click"
           >
             All Posts &rarr;
           </a>

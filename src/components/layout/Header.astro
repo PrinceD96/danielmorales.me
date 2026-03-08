@@ -1,6 +1,7 @@
 ---
 import { siteConfig } from "@/config/site";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import SoundToggle from "@/components/ui/sound-toggle.astro";
 
 const currentPath = Astro.url.pathname;
 ---
@@ -10,6 +11,7 @@ const currentPath = Astro.url.pathname;
     <a
       href="/"
       class="text-lg tracking-tight text-foreground"
+      data-sound="navigate"
     >
       {siteConfig.name}
     </a>
@@ -20,6 +22,7 @@ const currentPath = Astro.url.pathname;
         return (
           <a
             href={item.href}
+            data-sound="click"
             class:list={[
               "px-3 py-1.5 text-sm transition-colors duration-200",
               isActive
@@ -32,6 +35,7 @@ const currentPath = Astro.url.pathname;
           </a>
         );
       })}
+      <SoundToggle />
       <ThemeToggle client:load transition:persist />
     </div>
   </nav>
