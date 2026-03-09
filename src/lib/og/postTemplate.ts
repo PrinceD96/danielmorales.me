@@ -173,9 +173,11 @@ export function postTemplate({
                       props: {
                         style: {
                           display: "flex",
-                          flexDirection: "column",
-                          gap: "16px",
-                          marginBottom: "auto", // pushes title down slightly if needed, but we'll use flex grow differently
+                          flexDirection: "row", // Changed to row
+                          justifyContent: "space-between", // Spread date and tags
+                          alignItems: "center", // Center vertically
+                          width: "100%",
+                          marginBottom: "auto", 
                         },
                         children: [
                           {
@@ -237,7 +239,7 @@ export function postTemplate({
                                 fontSize: `${titleSize}px`,
                                 fontWeight: 800,
                                 color: c.fg,
-                                lineHeight: 1.1,
+                                lineHeight: 1.15, // Increased line-height for readability
                                 letterSpacing: "-0.04em",
                                 display: "flex",
                                 flexDirection: "column",
