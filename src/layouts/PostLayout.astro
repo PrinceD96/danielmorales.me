@@ -64,7 +64,7 @@ const postWordCount = body ? getWordCount(body) : undefined;
 const postUrl = `${siteConfig.url}/blog/${slug}`;
 
 // OG image fallback chain: ogImage > coverImage > generated
-const postOgImage = ogImage || coverImage || `/blog/${slug}/card.png`;
+const postOgImage = ogImage || coverImage || `/blog/${slug}/og.png`;
 
 const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`;
 const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(title)}`;
