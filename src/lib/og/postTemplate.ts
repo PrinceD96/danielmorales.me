@@ -11,6 +11,9 @@ const c = {
   bg: "#1a1a1a",
   fg: "#ffffff",
   muted: "#999999",
+  card: "#141414",
+  cardBorder: "rgba(255, 255, 255, 0.2)",
+  backCard: "rgba(255, 255, 255, 0.03)",
 };
 
 interface PostTemplateProps {
@@ -29,6 +32,9 @@ export function postTemplate({
   siteUrl,
 }: PostTemplateProps): ReactNode {
   const titleSize = title.length > 80 ? 44 : title.length > 50 ? 54 : 64;
+  const safeInsetX = 68;
+  const safeInsetTop = 52;
+  const safeInsetBottom = 62;
 
   return {
     type: "div",
@@ -42,74 +48,127 @@ export function postTemplate({
         position: "relative",
       },
       children: [
-        // Dot grid background layer
-        ...dotGrid(1200, 630),
         // Content layer
         {
           type: "div",
           props: {
             style: {
               display: "flex",
-              flexDirection: "column",
               width: "100%",
               height: "100%",
-              padding: "60px 64px 52px 64px",
+              padding: "86px 96px 92px 74px",
               position: "relative",
             },
             children: [
-              // Title — top-left
+              // Back card
               {
                 type: "div",
                 props: {
                   style: {
-                    display: "flex",
-                    flex: 1,
+                    position: "absolute",
+                    top: "40px",
+                    left: "140px",
+                    right: "34px",
+                    bottom: "126px",
+                    borderRadius: "28px",
+                    backgroundColor: "transparent",
+                    border: `2px solid ${c.cardBorder}`,
                   },
-                  children: [
-                    {
-                      type: "div",
-                      props: {
-                        style: {
-                          fontSize: `${titleSize}px`,
-                          fontWeight: 700,
-                          color: c.fg,
-                          lineHeight: 1.18,
-                          letterSpacing: "-0.03em",
-                        },
-                        children: title,
-                      },
-                    },
-                  ],
                 },
               },
-              // Footer row
+              // Front card
               {
                 type: "div",
                 props: {
                   style: {
                     display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-end",
+                    flexDirection: "column",
+                    overflow: "hidden",
+                    width: "100%",
+                    height: "100%",
+                    padding: `${safeInsetTop}px ${safeInsetX}px ${safeInsetBottom}px ${safeInsetX}px`,
+                    position: "relative",
+                    borderRadius: "28px",
+                    backgroundColor: c.card,
+                    border: `2px solid ${c.cardBorder}`,
+                    boxShadow: "0 18px 60px rgba(0, 0, 0, 0.28)",
                   },
                   children: [
-                    // by Author
+                    ...dotGrid(1088, 546, {
+                      spacing: 24,
+                      dotSize: 2,
+                      color: "rgba(255, 255, 255, 0.14)",
+                      offset: 14,
+                    }),
                     {
                       type: "div",
                       props: {
                         style: {
                           display: "flex",
-                          alignItems: "baseline",
-                          gap: "10px",
+                          flex: 1,
+                          position: "relative",
                         },
                         children: [
                           {
-                            type: "span",
+                            type: "div",
                             props: {
                               style: {
-                                fontSize: "24px",
-                                color: c.muted,
+                                fontSize: `${titleSize}px`,
+                                fontWeight: 700,
+                                color: c.fg,
+                                lineHeight: 1.16,
+                                letterSpacing: "-0.03em",
+                                maxWidth: "860px",
                               },
-                              children: "by",
+                              children: title,
+                            },
+                          },
+                        ],
+                      },
+                    },
+                    // Footer row
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "flex-end",
+                          position: "relative",
+                        },
+                        children: [
+                          {
+                            type: "div",
+                            props: {
+                              style: {
+                                display: "flex",
+                                alignItems: "baseline",
+                                gap: "10px",
+                                paddingLeft: "10px",
+                              },
+                              children: [
+                                {
+                                  type: "span",
+                                  props: {
+                                    style: {
+                                      fontSize: "24px",
+                                      color: c.muted,
+                                    },
+                                    children: "by",
+                                  },
+                                },
+                                {
+                                  type: "span",
+                                  props: {
+                                    style: {
+                                      fontSize: "24px",
+                                      fontWeight: 700,
+                                      color: c.fg,
+                                    },
+                                    children: "Daniel Morales",
+                                  },
+                                },
+                              ],
                             },
                           },
                           {
@@ -119,23 +178,12 @@ export function postTemplate({
                                 fontSize: "24px",
                                 fontWeight: 700,
                                 color: c.fg,
+                                paddingRight: "10px",
                               },
-                              children: "Daniel Morales",
+                              children: siteUrl.replace("https://", ""),
                             },
                           },
                         ],
-                      },
-                    },
-                    // Site URL
-                    {
-                      type: "span",
-                      props: {
-                        style: {
-                          fontSize: "24px",
-                          fontWeight: 700,
-                          color: c.fg,
-                        },
-                        children: siteUrl.replace("https://", ""),
                       },
                     },
                   ],
