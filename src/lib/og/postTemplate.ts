@@ -8,11 +8,11 @@ import { dotGrid } from "./dotGrid";
  */
 
 const c = {
-  bg: "#1a1a1a",
-  fg: "#ffffff",
-  muted: "#999999",
-  card: "#141414",
-  cardBorder: "rgba(255, 255, 255, 0.2)",
+  bg: "#f3f0ec",
+  fg: "#111111",
+  muted: "#5f5a55",
+  card: "#f7f4ef",
+  cardBorder: "rgba(17, 17, 17, 0.7)",
   backCard: "rgba(255, 255, 255, 0.03)",
 };
 
@@ -72,7 +72,7 @@ export function postTemplate({
                     bottom: "126px",
                     borderRadius: "28px",
                     backgroundColor: "transparent",
-                    border: `2px solid ${c.cardBorder}`,
+                    border: `3px solid ${c.cardBorder}`,
                   },
                 },
               },
@@ -90,14 +90,14 @@ export function postTemplate({
                     position: "relative",
                     borderRadius: "28px",
                     backgroundColor: c.card,
-                    border: `2px solid ${c.cardBorder}`,
-                    boxShadow: "0 18px 60px rgba(0, 0, 0, 0.28)",
+                    border: `3px solid ${c.cardBorder}`,
+                    boxShadow: "0 18px 60px rgba(17, 17, 17, 0.08)",
                   },
                   children: [
                     ...dotGrid(1088, 546, {
                       spacing: 24,
                       dotSize: 2,
-                      color: "rgba(255, 255, 255, 0.14)",
+                      color: "rgba(17, 17, 17, 0.12)",
                       offset: 14,
                     }),
                     {
