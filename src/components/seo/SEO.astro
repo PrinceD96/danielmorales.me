@@ -45,6 +45,7 @@ const shouldNoindex = noindex || !isProduction;
 
 <title>{pageTitle}</title>
 <meta name="description" content={ogDescription} />
+<meta name="author" content={siteConfig.author.name} />
 <link rel="canonical" href={canonical} />
 
 {shouldNoindex && <meta name="robots" content="noindex, nofollow" />}

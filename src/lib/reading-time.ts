@@ -16,8 +16,12 @@ function stripMarkdown(text: string): string {
     .replace(/export\s.*?\n/g, ""); // esm exports
 }
 
+export function wordCount(content: string): number {
+  return stripMarkdown(content).split(/\s+/).filter(Boolean).length;
+}
+
 export function readingTime(content: string): number {
-  const words = stripMarkdown(content).split(/\s+/).filter(Boolean).length;
+  const words = wordCount(content);
   return Math.max(1, Math.round(words / WORDS_PER_MINUTE));
 }
 

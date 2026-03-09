@@ -3,7 +3,7 @@ import Layout from "./Layout.astro";
 import JsonLdBlogPosting from "@/components/seo/JsonLdBlogPosting.astro";
 import JsonLdBreadcrumb from "@/components/seo/JsonLdBreadcrumb.astro";
 import { siteConfig } from "@/config/site";
-import { readingTimeText } from "@/lib/reading-time";
+import { readingTimeText, wordCount as getWordCount } from "@/lib/reading-time";
 import { Clock, ArrowLeft, ArrowRight, Copy, ChevronUp } from "@lucide/astro";
 import LinkedIn from "@/components/icons/LinkedIn.astro";
 import X from "@/components/icons/X.astro";
@@ -58,6 +58,7 @@ const updatedDate = updatedAt?.toLocaleDateString("en-US", {
 });
 
 const readTime = body ? readingTimeText(body) : undefined;
+const postWordCount = body ? getWordCount(body) : undefined;
 const postUrl = `${siteConfig.url}/blog/${slug}`;
 const linkedInShareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(postUrl)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(description)}`;
 const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(title)}`;
@@ -83,6 +84,7 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
     tags={tags}
     image={coverImage}
     slug={slug}
+    wordCount={postWordCount}
   />
   <JsonLdBreadcrumb
     items={[

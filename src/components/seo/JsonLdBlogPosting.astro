@@ -9,9 +9,10 @@ interface Props {
   tags?: string[];
   image?: string;
   slug: string;
+  wordCount?: number;
 }
 
-const { title, description, publishedAt, updatedAt, tags, image, slug } = Astro.props;
+const { title, description, publishedAt, updatedAt, tags, image, slug, wordCount } = Astro.props;
 const url = `${siteConfig.url}/blog/${slug}`;
 ---
 
@@ -23,10 +24,15 @@ const url = `${siteConfig.url}/blog/${slug}`;
     headline: title,
     description,
     url,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
     datePublished: publishedAt,
     ...(updatedAt && { dateModified: updatedAt }),
     ...(image && { image: new URL(image, siteConfig.url).href }),
     ...(tags && { keywords: tags.join(", ") }),
+    ...(wordCount && { wordCount }),
     author: {
       "@type": "Person",
       "@id": `${siteConfig.url}/#person`,

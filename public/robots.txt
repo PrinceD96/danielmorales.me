@@ -1,6 +1,33 @@
 # https://danielmorales.me
 
+# Default: allow all crawlers
 User-agent: *
 Allow: /
+
+# AI Search Bots — explicit allow for citation
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Block training-only crawlers (no search/citation value)
+User-agent: CCBot
+Disallow: /
 
 Sitemap: https://danielmorales.me/sitemap-index.xml
