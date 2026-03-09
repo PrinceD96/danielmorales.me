@@ -81,12 +81,14 @@ interface SiteTemplateProps {
   name: string;
   description: string;
   siteUrl: string;
+  portraitDataUrl?: string;
 }
 
 export function siteTemplate({
   name,
   description,
   siteUrl,
+  portraitDataUrl,
 }: SiteTemplateProps): ReactNode {
   return {
     type: "div",
@@ -110,67 +112,80 @@ export function siteTemplate({
           offsetY: 15,
         }),
         
-        // Massive decorative circle
+        // Framed portrait panel
         {
           type: "div",
           props: {
             style: {
               position: "absolute",
-              top: "-250px",
-              right: "-250px",
-              width: "800px",
-              height: "800px",
-              borderRadius: "400px",
-              backgroundColor: "transparent",
-              border: `2px solid ${c.grid}`,
+              top: "54px",
+              right: "72px",
+              width: "410px",
+              height: "510px",
+              backgroundColor: c.bg,
+              border: `2px solid ${c.fg}`,
+              boxShadow: `22px 22px 0 ${c.panelStrong}`,
               display: "flex",
-              justifyContent: "center",
               alignItems: "center",
+              justifyContent: "center",
+              padding: "18px",
             },
             children: [
               {
                 type: "div",
                 props: {
                   style: {
-                    width: "560px",
-                    height: "560px",
-                    borderRadius: "280px",
-                    backgroundColor: c.panelStrong,
+                    width: "100%",
+                    height: "100%",
                     border: `1px solid ${c.grid}`,
+                    overflow: "hidden",
+                    backgroundColor: c.panel,
                     display: "flex",
-                    justifyContent: "center",
                     alignItems: "center",
+                    justifyContent: "center",
                   },
-                  children: [
-                    {
-                      type: "div",
-                      props: {
-                        style: {
-                          width: "300px",
-                          height: "300px",
-                          borderRadius: "150px",
-                          backgroundColor: c.panel,
-                          border: `1px solid ${c.grid}`,
-                        }
+                  children: portraitDataUrl
+                    ? {
+                        type: "img",
+                        props: {
+                          src: portraitDataUrl,
+                          width: "374",
+                          height: "474",
+                          style: {
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          },
+                        },
                       }
-                    }
-                  ]
-                }
-              }
-            ]
+                    : {
+                        type: "div",
+                        props: {
+                          style: {
+                            width: "220px",
+                            height: "220px",
+                            borderRadius: "110px",
+                            backgroundColor: c.panelStrong,
+                            border: `1px solid ${c.grid}`,
+                          },
+                        },
+                      },
+                },
+              },
+            ],
           },
         },
 
-        // Floating overlapping rectangles (moved to right side)
+        // Floating overlapping rectangles
         {
           type: "div",
           props: {
             style: {
               position: "absolute",
-              right: "200px",
-              bottom: "80px",
-              width: "300px",
-              height: "120px",
+              right: "38px",
+              bottom: "32px",
+              width: "240px",
+              height: "96px",
               backgroundColor: c.panel,
               border: `1px solid ${c.grid}`,
             }
@@ -181,17 +196,17 @@ export function siteTemplate({
           props: {
             style: {
               position: "absolute",
-              right: "80px",
-              bottom: "40px",
-              width: "300px",
-              height: "120px",
+              right: "0px",
+              bottom: "0px",
+              width: "240px",
+              height: "96px",
               backgroundColor: c.bg,
               border: `1px solid ${c.grid}`,
-              boxShadow: `20px 20px 0px ${c.panelStrong}`,
+              boxShadow: `16px 16px 0px ${c.panelStrong}`,
               display: "flex",
               alignItems: "center",
-              paddingLeft: "40px",
-              fontSize: "24px",
+              paddingLeft: "28px",
+              fontSize: "20px",
               color: c.muted,
               letterSpacing: "0.2em",
             },
@@ -269,15 +284,15 @@ export function siteTemplate({
                 type: "div",
                 props: {
                   style: {
-                    fontSize: "110px",
-                    fontWeight: 800,
-                    color: c.fg,
-                    letterSpacing: "-0.05em",
-                    lineHeight: 0.9,
-                    maxWidth: "850px",
-                    display: "flex",
-                    flexDirection: "column",
-                  },
+                     fontSize: "98px",
+                     fontWeight: 800,
+                     color: c.fg,
+                     letterSpacing: "-0.05em",
+                     lineHeight: 0.9,
+                     maxWidth: "620px",
+                     display: "flex",
+                     flexDirection: "column",
+                   },
                   children: name,
                 },
               },
@@ -305,10 +320,10 @@ export function siteTemplate({
                     fontWeight: 400,
                     color: c.muted,
                     lineHeight: 1.4,
-                    maxWidth: "700px",
-                  },
-                  children: description,
-                },
+                     maxWidth: "560px",
+                   },
+                   children: description,
+                 },
               },
             ],
           },

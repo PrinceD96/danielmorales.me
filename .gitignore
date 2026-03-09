@@ -22,6 +22,8 @@ node_modules/
 
 # logs
 *.log
+*.lock
+!bun.lock
 
 # macOS
 .DS_Store
