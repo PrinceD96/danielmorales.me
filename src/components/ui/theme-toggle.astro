@@ -16,13 +16,11 @@ import { Moon, Sun } from "@lucide/astro";
   </span>
 </button>
 
-<script>
-  import { playSound } from "@/lib/sounds";
-
+<script is:inline>
   function initThemeToggle() {
-    const button = document.getElementById("theme-toggle") as HTMLButtonElement | null;
-    const lightIcon = document.getElementById("theme-light-icon") as HTMLSpanElement | null;
-    const darkIcon = document.getElementById("theme-dark-icon") as HTMLSpanElement | null;
+    const button = document.getElementById("theme-toggle");
+    const lightIcon = document.getElementById("theme-light-icon");
+    const darkIcon = document.getElementById("theme-dark-icon");
     if (!button || !lightIcon || !darkIcon) return;
 
     const toggleButton = button;
@@ -32,7 +30,7 @@ import { Moon, Sun } from "@lucide/astro";
     if (toggleButton.dataset.initialized) return;
     toggleButton.dataset.initialized = "true";
 
-    function updateIcons(theme: "light" | "dark", animate: boolean) {
+    function updateIcons(theme, animate) {
       const transition = animate ? "transition-all duration-300" : "";
 
       if (theme === "dark") {
@@ -57,7 +55,9 @@ import { Moon, Sun } from "@lucide/astro";
       document.documentElement.classList.toggle("dark", nextTheme === "dark");
       localStorage.setItem("theme", nextTheme);
       updateIcons(nextTheme, true);
-      playSound(nextTheme === "dark" ? "toggle-on" : "toggle-off");
+      if (window.__playSiteSound) {
+        window.__playSiteSound(nextTheme === "dark" ? "toggle-on" : "toggle-off");
+      }
     });
   }
 

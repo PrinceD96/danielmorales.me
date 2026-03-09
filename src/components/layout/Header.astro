@@ -50,7 +50,7 @@ const currentPath = Astro.url.pathname;
   ></div>
 </header>
 
-<script>
+<script is:inline>
   function updateProgress() {
     const bar = document.getElementById("reading-progress");
     if (!bar) return;

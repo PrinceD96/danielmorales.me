@@ -63,30 +63,122 @@ const props = Astro.props;
     </main>
     <Footer />
 
-    <!-- Sound system: event delegation for [data-sound] and [data-sound-hover] attributes -->
-    <script>
-      import { playSound } from "@/lib/sounds";
+    <script is:inline>
+      if (!window.__siteAudioBound) {
+        window.__siteAudioBound = true;
 
-      // Click delegation: any element with data-sound="click" etc.
-      document.addEventListener("click", (e) => {
-        const target = (e.target as HTMLElement).closest<HTMLElement>("[data-sound]");
-        if (!target) return;
-        const sound = target.dataset.sound;
-        if (sound === "click" || sound === "navigate" || sound === "copy" || sound === "toggle-on" || sound === "toggle-off") {
-          playSound(sound);
-        }
-      });
+        var siteAudioContext = null;
+        var AudioContextClass = window.AudioContext || window["webkitAudioContext"];
 
-      // Hover delegation: uses mouseenter with capture phase.
-      // SVG re-trigger is prevented via CSS (::before overlay on .social-icon).
-      document.addEventListener("mouseenter", (e) => {
-        const target = (e.target as HTMLElement).closest<HTMLElement>("[data-sound-hover]");
-        if (!target) return;
-        const sound = target.dataset.soundHover;
-        if (sound === "hover-tick") {
-          playSound(sound);
+        function getSiteAudioContext() {
+          if (siteAudioContext || !AudioContextClass) return siteAudioContext;
+          try {
+            siteAudioContext = new AudioContextClass();
+          } catch {
+            siteAudioContext = null;
+          }
+          return siteAudioContext;
         }
-      }, true);
+
+        function siteSoundsEnabled() {
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return false;
+          return localStorage.getItem("sounds") !== "off";
+        }
+
+        function playSiteTone(configure, duration) {
+          if (!siteSoundsEnabled()) return;
+          var audio = getSiteAudioContext();
+          if (!audio) return;
+          if (audio.state === "suspended") audio.resume();
+
+          var time = audio.currentTime;
+          var osc = audio.createOscillator();
+          var gain = audio.createGain();
+          osc.type = "sine";
+          configure(osc, gain, time);
+          osc.connect(gain).connect(audio.destination);
+          osc.start(time);
+          osc.stop(time + duration);
+        }
+
+        window.__playSiteSound = function (name) {
+          switch (name) {
+            case "click":
+              playSiteTone(function (osc, gain, time) {
+                osc.frequency.setValueAtTime(800, time);
+                gain.gain.setValueAtTime(0.3, time);
+                gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+              }, 0.05);
+              break;
+            case "toggle-on":
+            case "toggle-off":
+              playSiteTone(function (osc, gain, time) {
+                var up = name === "toggle-on";
+                osc.frequency.setValueAtTime(up ? 600 : 1000, time);
+                osc.frequency.exponentialRampToValueAtTime(up ? 1000 : 600, time + 0.08);
+                gain.gain.setValueAtTime(0.3, time);
+                gain.gain.exponentialRampToValueAtTime(0.001, time + 0.08);
+              }, 0.08);
+              break;
+            case "copy":
+              if (!siteSoundsEnabled()) return;
+              var audio = getSiteAudioContext();
+              if (!audio) return;
+              if (audio.state === "suspended") audio.resume();
+
+              var time = audio.currentTime;
+              var osc1 = audio.createOscillator();
+              var gain1 = audio.createGain();
+              osc1.type = "sine";
+              osc1.frequency.setValueAtTime(880, time);
+              gain1.gain.setValueAtTime(0.24, time);
+              gain1.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
+              osc1.connect(gain1).connect(audio.destination);
+              osc1.start(time);
+              osc1.stop(time + 0.1);
+
+              var osc2 = audio.createOscillator();
+              var gain2 = audio.createGain();
+              osc2.type = "sine";
+              osc2.frequency.setValueAtTime(1320, time + 0.04);
+              gain2.gain.setValueAtTime(0, time);
+              gain2.gain.setValueAtTime(0.18, time + 0.04);
+              gain2.gain.exponentialRampToValueAtTime(0.001, time + 0.12);
+              osc2.connect(gain2).connect(audio.destination);
+              osc2.start(time);
+              osc2.stop(time + 0.12);
+              break;
+            case "navigate":
+              playSiteTone(function (osc, gain, time) {
+                osc.frequency.setValueAtTime(500, time);
+                osc.frequency.exponentialRampToValueAtTime(400, time + 0.04);
+                gain.gain.setValueAtTime(0.21, time);
+                gain.gain.exponentialRampToValueAtTime(0.001, time + 0.04);
+              }, 0.04);
+              break;
+            case "hover-tick":
+              playSiteTone(function (osc, gain, time) {
+                osc.frequency.setValueAtTime(600, time);
+                osc.frequency.exponentialRampToValueAtTime(1200, time + 0.025);
+                gain.gain.setValueAtTime(0.06, time);
+                gain.gain.exponentialRampToValueAtTime(0.001, time + 0.025);
+              }, 0.025);
+              break;
+          }
+        };
+
+        document.addEventListener("click", function (event) {
+          var target = event.target && event.target.closest ? event.target.closest("[data-sound]") : null;
+          var sound = target && target.dataset ? target.dataset.sound : null;
+          if (sound) window.__playSiteSound(sound);
+        });
+
+        document.addEventListener("mouseenter", function (event) {
+          var target = event.target && event.target.closest ? event.target.closest("[data-sound-hover]") : null;
+          var sound = target && target.dataset ? target.dataset.soundHover : null;
+          if (sound) window.__playSiteSound(sound);
+        }, true);
+      }
     </script>
   </body>
 </html>

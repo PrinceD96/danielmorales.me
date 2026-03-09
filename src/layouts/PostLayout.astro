@@ -255,14 +255,14 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
   </div>
 </Layout>
 
-<script>
+<script is:inline>
   function initPostLayout() {
-    const copyButton = document.getElementById("copy-link-btn") as HTMLButtonElement | null;
+    const copyButton = document.getElementById("copy-link-btn");
     if (copyButton && !copyButton.dataset.initialized) {
       copyButton.dataset.initialized = "true";
 
       copyButton.addEventListener("click", async (e) => {
-        const btn = e.currentTarget as HTMLButtonElement;
+        const btn = e.currentTarget;
         const url = btn.dataset.copyUrl;
         if (!url || !navigator.clipboard || !window.isSecureContext) return;
 
@@ -278,7 +278,7 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
       });
     }
 
-    const backToTop = document.getElementById("back-to-top") as HTMLButtonElement | null;
+    const backToTop = document.getElementById("back-to-top");
     if (backToTop && !backToTop.dataset.initialized) {
       backToTop.dataset.initialized = "true";
 

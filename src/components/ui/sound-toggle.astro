@@ -16,31 +16,29 @@ import { Volume2, VolumeOff } from "@lucide/astro";
   </span>
 </button>
 
-<script>
+<script is:inline>
   function initSoundToggle() {
     const btn = document.getElementById("sound-toggle");
     const onIcon = document.getElementById("sound-on-icon");
     const offIcon = document.getElementById("sound-off-icon");
     if (!btn || !onIcon || !offIcon) return;
 
-    // Avoid duplicate listeners on persisted element
     if (btn.dataset.initialized) return;
     btn.dataset.initialized = "true";
 
-    function updateIcons(enabled: boolean, animate: boolean) {
+    function updateIcons(enabled, animate) {
       const transition = animate ? "transition-all duration-300" : "";
       if (enabled) {
-        onIcon!.className = `absolute ${transition} rotate-0 scale-100 opacity-100`;
-        offIcon!.className = `absolute ${transition} rotate-90 scale-0 opacity-0`;
-        btn!.setAttribute("aria-label", "Mute sounds");
+        onIcon.className = `absolute ${transition} rotate-0 scale-100 opacity-100`;
+        offIcon.className = `absolute ${transition} rotate-90 scale-0 opacity-0`;
+        btn.setAttribute("aria-label", "Mute sounds");
       } else {
-        onIcon!.className = `absolute ${transition} -rotate-90 scale-0 opacity-0`;
-        offIcon!.className = `absolute ${transition} rotate-0 scale-100 opacity-100`;
-        btn!.setAttribute("aria-label", "Enable sounds");
+        onIcon.className = `absolute ${transition} -rotate-90 scale-0 opacity-0`;
+        offIcon.className = `absolute ${transition} rotate-0 scale-100 opacity-100`;
+        btn.setAttribute("aria-label", "Enable sounds");
       }
     }
 
-    // Set initial state without animation
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const pref = localStorage.getItem("sounds");
     const enabled = !reducedMotion && pref !== "off";
