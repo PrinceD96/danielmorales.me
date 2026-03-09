@@ -111,6 +111,64 @@ export function siteTemplate({
           offsetX: 30,
           offsetY: 15,
         }),
+
+        // Edge fade overlays — grid fades out toward borders
+        // Left
+        {
+          type: "div",
+          props: {
+            style: {
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "160px",
+              height: "100%",
+              backgroundImage: `linear-gradient(to right, ${c.bg}, ${c.bg}00)`,
+            },
+          },
+        },
+        // Right
+        {
+          type: "div",
+          props: {
+            style: {
+              position: "absolute",
+              top: 0,
+              right: 0,
+              width: "160px",
+              height: "100%",
+              backgroundImage: `linear-gradient(to left, ${c.bg}, ${c.bg}00)`,
+            },
+          },
+        },
+        // Top
+        {
+          type: "div",
+          props: {
+            style: {
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "120px",
+              backgroundImage: `linear-gradient(to bottom, ${c.bg}, ${c.bg}00)`,
+            },
+          },
+        },
+        // Bottom
+        {
+          type: "div",
+          props: {
+            style: {
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              width: "100%",
+              height: "120px",
+              backgroundImage: `linear-gradient(to top, ${c.bg}, ${c.bg}00)`,
+            },
+          },
+        },
         
         // Framed portrait panel
         {
@@ -176,44 +234,6 @@ export function siteTemplate({
           },
         },
 
-        // Floating overlapping rectangles
-        {
-          type: "div",
-          props: {
-            style: {
-              position: "absolute",
-              right: "38px",
-              bottom: "32px",
-              width: "240px",
-              height: "96px",
-              backgroundColor: c.panel,
-              border: `1px solid ${c.grid}`,
-            }
-          }
-        },
-        {
-          type: "div",
-          props: {
-            style: {
-              position: "absolute",
-              right: "0px",
-              bottom: "0px",
-              width: "240px",
-              height: "96px",
-              backgroundColor: c.bg,
-              border: `1px solid ${c.grid}`,
-              boxShadow: `16px 16px 0px ${c.panelStrong}`,
-              display: "flex",
-              alignItems: "center",
-              paddingLeft: "28px",
-              fontSize: "20px",
-              color: c.muted,
-              letterSpacing: "0.2em",
-            },
-            children: "EST. 2024"
-          }
-        },
-
         // Top bar
         {
           type: "div",
@@ -249,35 +269,20 @@ export function siteTemplate({
             },
             children: [
               // Pre-title (URL)
-              {
-                type: "div",
-                props: {
-                  style: {
-                    fontSize: "24px",
-                    fontWeight: 700,
-                    color: c.muted,
-                    marginBottom: "40px",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1em",
-                    display: "flex",
-                    alignItems: "center",
-                  },
-                  children: [
-                    {
-                      type: "div",
-                      props: {
-                        style: {
-                          width: "40px",
-                          height: "2px",
-                          backgroundColor: c.muted,
-                          marginRight: "20px",
-                        }
-                      }
+               {
+                 type: "div",
+                 props: {
+                   style: {
+                     fontSize: "24px",
+                     fontWeight: 700,
+                     color: c.muted,
+                     marginBottom: "40px",
+                     textTransform: "uppercase",
+                     letterSpacing: "0.1em",
                     },
-                    siteUrl.replace("https://", ""),
-                  ],
-                },
-              },
+                   children: siteUrl.replace("https://", ""),
+                 },
+               },
               
               // Name (Massive, multi-line if needed)
               {
