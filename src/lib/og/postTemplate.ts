@@ -208,8 +208,8 @@ export function postTemplate({
                                       fontWeight: 600,
                                       color: c.bg,
                                       padding: "6px 16px",
-                                      border: `2px solid ${c.fg}`,
                                       backgroundColor: c.primary,
+                                      borderRadius: 0, // Squared corners
                                     },
                                   children: tag,
                                 }
