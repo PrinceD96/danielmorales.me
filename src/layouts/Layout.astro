@@ -30,6 +30,9 @@ const props = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)" />
     <meta name="generator" content={Astro.generator} />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -39,7 +42,6 @@ const props = Astro.props;
     <JsonLdWebsite />
     <ClientRouter />
 
-    <!-- Theme: prevent FOUC -->
     <script is:inline>
       function applyTheme() {
         var stored = localStorage.getItem("theme");
@@ -56,7 +58,7 @@ const props = Astro.props;
   </head>
   <body class="min-h-screen flex flex-col">
     <Header />
-    <main class="flex-1 pt-8 sm:pt-10" transition:animate="fade">
+    <main class="flex-1 pt-8 sm:pt-10">
       <slot />
     </main>
     <Footer />

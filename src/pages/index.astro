@@ -5,6 +5,7 @@ import danielImage from "@/assets/daniel-morales.webp";
 import Layout from "@/layouts/Layout.astro";
 import { siteConfig } from "@/config/site";
 import { readingTimeText } from "@/lib/reading-time";
+import { postTransitionName } from "@/lib/transitions";
 import GitHub from "@/components/icons/GitHub.astro";
 import X from "@/components/icons/X.astro";
 import LinkedIn from "@/components/icons/LinkedIn.astro";
@@ -40,6 +41,8 @@ const recentPosts = sorted.slice(0, 10);
             width={320}
             height={320}
             loading="eager"
+            fetchpriority="high"
+            sizes="160px"
           />
         </div>
         <div class="flex-1">
@@ -89,7 +92,7 @@ const recentPosts = sorted.slice(0, 10);
               <a href={`/blog/${post.id}`} class="group block" data-sound="navigate">
                 <h2
                   class="text-xl font-medium leading-snug text-primary decoration-dashed underline-offset-4 transition-all duration-200 group-hover:underline group-hover:decoration-primary/30 sm:text-2xl"
-                  transition:name={`post-title-${post.id}`}
+                  transition:name={postTransitionName(post.id)}
                 >
                   {title}
                 </h2>

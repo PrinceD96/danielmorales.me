@@ -4,6 +4,7 @@ import JsonLdBlogPosting from "@/components/seo/JsonLdBlogPosting.astro";
 import JsonLdBreadcrumb from "@/components/seo/JsonLdBreadcrumb.astro";
 import { siteConfig } from "@/config/site";
 import { readingTimeText, wordCount as getWordCount } from "@/lib/reading-time";
+import { postTransitionName } from "@/lib/transitions";
 import { Clock, ArrowLeft, ArrowRight, Copy, ChevronUp } from "@lucide/astro";
 import LinkedIn from "@/components/icons/LinkedIn.astro";
 import X from "@/components/icons/X.astro";
@@ -116,7 +117,7 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
         <!-- Title -->
         <h1
           class="text-3xl font-bold leading-[1.15] text-primary sm:text-4xl lg:text-5xl"
-          transition:name={`post-title-${slug}`}
+          transition:name={postTransitionName(slug)}
         >
           {title}
         </h1>
@@ -210,7 +211,7 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
                 Previous
               </span>
               <span class="text-sm font-medium leading-snug text-foreground transition-colors group-hover:text-primary line-clamp-2">
-                {prevPost.title}
+                <span transition:name={postTransitionName(prevPost.slug)}>{prevPost.title}</span>
               </span>
             </a>
           ) : (
@@ -227,7 +228,7 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
                 <ArrowRight size={14} />
               </span>
               <span class="text-sm font-medium leading-snug text-foreground transition-colors group-hover:text-primary line-clamp-2">
-                {nextPost.title}
+                <span transition:name={postTransitionName(nextPost.slug)}>{nextPost.title}</span>
               </span>
             </a>
           ) : (
@@ -255,54 +256,69 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
 </Layout>
 
 <script>
-  // Re-bind on every navigation (astro:page-load fires on initial + client-side nav)
-  document.addEventListener("astro:page-load", () => {
-    // Copy link to clipboard
-    document.getElementById("copy-link-btn")?.addEventListener("click", async (e) => {
-      const btn = e.currentTarget as HTMLButtonElement;
-      const url = btn.dataset.copyUrl;
-      if (!url) return;
+  function initPostLayout() {
+    const copyButton = document.getElementById("copy-link-btn") as HTMLButtonElement | null;
+    if (copyButton && !copyButton.dataset.initialized) {
+      copyButton.dataset.initialized = "true";
 
-      try {
+      copyButton.addEventListener("click", async (e) => {
+        const btn = e.currentTarget as HTMLButtonElement;
+        const url = btn.dataset.copyUrl;
+        if (!url || !navigator.clipboard || !window.isSecureContext) return;
+
         await navigator.clipboard.writeText(url);
-      } catch {
-        const input = document.createElement("input");
-        input.value = url;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand("copy");
-        document.body.removeChild(input);
-      }
 
-      // Swap to checkmark
-      const original = btn.innerHTML;
-      btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
-      btn.classList.add("text-primary", "border-primary/40");
-      setTimeout(() => {
-        btn.innerHTML = original;
-        btn.classList.remove("text-primary", "border-primary/40");
-      }, 2000);
-    });
+        const original = btn.innerHTML;
+        btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
+        btn.classList.add("text-primary", "border-primary/40");
+        setTimeout(() => {
+          btn.innerHTML = original;
+          btn.classList.remove("text-primary", "border-primary/40");
+        }, 2000);
+      });
+    }
 
-    // Back to top button visibility + scroll
-    const backToTop = document.getElementById("back-to-top");
-    if (backToTop) {
-      const toggle = () => {
-        if (window.scrollY > 400) {
-          backToTop.classList.remove("opacity-0", "pointer-events-none");
-          backToTop.classList.add("opacity-100");
-        } else {
-          backToTop.classList.add("opacity-0", "pointer-events-none");
-          backToTop.classList.remove("opacity-100");
-        }
-      };
-
-      window.addEventListener("scroll", toggle, { passive: true });
-      toggle();
+    const backToTop = document.getElementById("back-to-top") as HTMLButtonElement | null;
+    if (backToTop && !backToTop.dataset.initialized) {
+      backToTop.dataset.initialized = "true";
 
       backToTop.addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     }
-  });
+
+    if (!document.documentElement.dataset.postLayoutScrollBound) {
+      document.documentElement.dataset.postLayoutScrollBound = "true";
+      window.addEventListener("scroll", () => {
+        const currentBackToTop = document.getElementById("back-to-top");
+        if (!currentBackToTop) return;
+
+        if (window.scrollY > 400) {
+          currentBackToTop.classList.remove("opacity-0", "pointer-events-none");
+          currentBackToTop.classList.add("opacity-100");
+        } else {
+          currentBackToTop.classList.add("opacity-0", "pointer-events-none");
+          currentBackToTop.classList.remove("opacity-100");
+        }
+      }, { passive: true });
+    }
+
+    const currentBackToTop = document.getElementById("back-to-top");
+    if (currentBackToTop) {
+      if (window.scrollY > 400) {
+        currentBackToTop.classList.remove("opacity-0", "pointer-events-none");
+        currentBackToTop.classList.add("opacity-100");
+      } else {
+        currentBackToTop.classList.add("opacity-0", "pointer-events-none");
+        currentBackToTop.classList.remove("opacity-100");
+      }
+    }
+  }
+
+  if (!document.documentElement.dataset.postLayoutInit) {
+    document.documentElement.dataset.postLayoutInit = "true";
+    document.addEventListener("astro:page-load", initPostLayout);
+  }
+
+  initPostLayout();
 </script>

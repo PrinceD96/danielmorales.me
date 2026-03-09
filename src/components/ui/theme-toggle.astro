@@ -1,0 +1,66 @@
+---
+import { Moon, Sun } from "@lucide/astro";
+---
+
+<button
+  type="button"
+  id="theme-toggle"
+  class="relative flex size-9 items-center justify-center rounded-md text-muted-foreground transition-colors duration-200 cursor-pointer hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+  aria-label="Toggle theme"
+>
+  <span id="theme-light-icon" class="absolute">
+    <Sun size={16} />
+  </span>
+  <span id="theme-dark-icon" class="absolute rotate-90 scale-0 opacity-0">
+    <Moon size={16} />
+  </span>
+</button>
+
+<script>
+  import { playSound } from "@/lib/sounds";
+
+  function initThemeToggle() {
+    const button = document.getElementById("theme-toggle") as HTMLButtonElement | null;
+    const lightIcon = document.getElementById("theme-light-icon") as HTMLSpanElement | null;
+    const darkIcon = document.getElementById("theme-dark-icon") as HTMLSpanElement | null;
+    if (!button || !lightIcon || !darkIcon) return;
+
+    const toggleButton = button;
+    const lightThemeIcon = lightIcon;
+    const darkThemeIcon = darkIcon;
+
+    if (toggleButton.dataset.initialized) return;
+    toggleButton.dataset.initialized = "true";
+
+    function updateIcons(theme: "light" | "dark", animate: boolean) {
+      const transition = animate ? "transition-all duration-300" : "";
+
+      if (theme === "dark") {
+        lightThemeIcon.className = `absolute ${transition} -rotate-90 scale-0 opacity-0`;
+        darkThemeIcon.className = `absolute ${transition} rotate-0 scale-100 opacity-100`;
+        toggleButton.setAttribute("aria-label", "Switch to light mode");
+        return;
+      }
+
+      lightThemeIcon.className = `absolute ${transition} rotate-0 scale-100 opacity-100`;
+      darkThemeIcon.className = `absolute ${transition} rotate-90 scale-0 opacity-0`;
+      toggleButton.setAttribute("aria-label", "Switch to dark mode");
+    }
+
+    const getTheme = () =>
+      document.documentElement.classList.contains("dark") ? "dark" : "light";
+
+    updateIcons(getTheme(), false);
+
+    toggleButton.addEventListener("click", () => {
+      const nextTheme = getTheme() === "dark" ? "light" : "dark";
+      document.documentElement.classList.toggle("dark", nextTheme === "dark");
+      localStorage.setItem("theme", nextTheme);
+      updateIcons(nextTheme, true);
+      playSound(nextTheme === "dark" ? "toggle-on" : "toggle-off");
+    });
+  }
+
+  initThemeToggle();
+  document.addEventListener("astro:page-load", initThemeToggle);
+</script>

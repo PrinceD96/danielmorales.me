@@ -6,6 +6,7 @@ import JsonLdBreadcrumb from "@/components/seo/JsonLdBreadcrumb.astro";
 import TagList from "@/components/blog/TagList.astro";
 import { siteConfig } from "@/config/site";
 import { readingTimeText } from "@/lib/reading-time";
+import { postTransitionName } from "@/lib/transitions";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts", ({ data }) => {
@@ -82,7 +83,7 @@ const shouldNoindex = filtered.length < 3;
                 <a href={`/blog/${post.id}`} class="group block" data-sound="navigate">
                   <h2
                     class="text-xl font-medium leading-snug text-primary decoration-dashed underline-offset-4 transition-all duration-200 group-hover:underline group-hover:decoration-primary/30 sm:text-2xl"
-                    transition:name={`post-title-${post.id}`}
+                    transition:name={postTransitionName(post.id)}
                   >
                     {title}
                   </h2>
