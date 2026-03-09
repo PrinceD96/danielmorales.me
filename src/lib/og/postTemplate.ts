@@ -1,69 +1,80 @@
 import type { ReactNode } from "react";
 
 /**
- * Generates a dot grid pattern as an array of satori-compatible elements.
+ * Generates a square grid pattern as an array of satori-compatible elements.
  */
-interface DotElement {
+interface GridElement {
   type: string;
   props: {
     style: Record<string, string | number>;
   };
 }
 
-function dotGrid(
+function squareGrid(
   width: number,
   height: number,
   opts: {
-    spacing?: number;
-    dotSize?: number;
+    size?: number;
     color?: string;
-    offset?: number;
+    stroke?: number;
+    offsetX?: number;
+    offsetY?: number;
   } = {}
-): DotElement[] {
+): GridElement[] {
   const {
-    spacing = 24,
-    dotSize = 2,
-    color = "rgba(255, 255, 255, 0.2)",
-    offset = 12,
+    size = 40,
+    color = "rgba(67, 82, 103, 0.12)",
+    stroke = 1,
+    offsetX = 0,
+    offsetY = 0,
   } = opts;
 
-  const dots: DotElement[] = [];
+  const lines: GridElement[] = [];
 
-  for (let y = offset; y < height; y += spacing) {
-    for (let x = offset; x < width; x += spacing) {
-      dots.push({
-        type: "div",
-        props: {
-          style: {
-            position: "absolute",
-            left: x,
-            top: y,
-            width: dotSize,
-            height: dotSize,
-            borderRadius: dotSize,
-            backgroundColor: color,
-          },
+  for (let x = offsetX; x <= width; x += size) {
+    lines.push({
+      type: "div",
+      props: {
+        style: {
+          position: "absolute",
+          left: x,
+          top: 0,
+          width: stroke,
+          height,
+          backgroundColor: color,
         },
-      });
-    }
+      },
+    });
   }
 
-  return dots;
+  for (let y = offsetY; y <= height; y += size) {
+    lines.push({
+      type: "div",
+      props: {
+        style: {
+          position: "absolute",
+          left: 0,
+          top: y,
+          width,
+          height: stroke,
+          backgroundColor: color,
+        },
+      },
+    });
+  }
+
+  return lines;
 }
 
 /**
- * Post OG template — Bold editorial layout.
+ * Post OG template — clean editorial layout matching site OG style.
  */
 
 const c = {
-  bg: "#ffffff",
-  fg: "#0c0a09",
-  primary: "#0069a8",
-  muted: "#737373", // A readable dark gray
-  card: "#f4f4f5", // Secondary
-  cardBorder: "#0c0a09",
-  accent: "rgba(0, 105, 168, 0.1)", // Primary with opacity
-  grid: "rgba(12, 10, 9, 0.1)",
+  bg: "#e9eef5",
+  grid: "rgba(73, 88, 110, 0.12)",
+  fg: "#132033",
+  muted: "#415069",
 };
 
 interface PostTemplateProps {
@@ -76,13 +87,11 @@ interface PostTemplateProps {
 
 export function postTemplate({
   title,
-  description,
   date,
   tags = [],
   siteUrl,
 }: PostTemplateProps): ReactNode {
-  // We want the title to be massive but safe enough to not overflow.
-  const titleSize = title.length > 70 ? 64 : title.length > 40 ? 76 : 90;
+  const titleSize = title.length > 70 ? 60 : title.length > 40 ? 72 : 84;
 
   return {
     type: "div",
@@ -91,40 +100,51 @@ export function postTemplate({
         display: "flex",
         width: "100%",
         height: "100%",
-        backgroundColor: c.card, // Secondary color background
+        backgroundColor: c.bg,
         fontFamily: "Geist Mono",
         position: "relative",
         overflow: "hidden",
       },
       children: [
         // Background Grid
-        ...dotGrid(1200, 630, {
-          spacing: 32,
-          dotSize: 3,
+        ...squareGrid(1200, 630, {
+          size: 60,
           color: c.grid,
-          offset: 16,
+          stroke: 1,
+          offsetX: 30,
+          offsetY: 15,
         }),
 
-        // Massive typographic background watermark
+        // Edge fade overlays
+        // Left
         {
           type: "div",
           props: {
             style: {
               position: "absolute",
-              top: "-40px",
-              left: "-20px",
-              fontSize: "400px",
-              fontWeight: 800,
-              color: c.accent, // Light primary text
-              lineHeight: 0.8,
-              letterSpacing: "-0.08em",
-              whiteSpace: "nowrap",
+              top: 0,
+              left: 0,
+              width: "160px",
+              height: "100%",
+              backgroundImage: `linear-gradient(to right, ${c.bg}, ${c.bg}00)`,
             },
-            children: "BUILD",
-          }
+          },
         },
-
-        // Top heavy border
+        // Right
+        {
+          type: "div",
+          props: {
+            style: {
+              position: "absolute",
+              top: 0,
+              right: 0,
+              width: "160px",
+              height: "100%",
+              backgroundImage: `linear-gradient(to left, ${c.bg}, ${c.bg}00)`,
+            },
+          },
+        },
+        // Top
         {
           type: "div",
           props: {
@@ -133,187 +153,225 @@ export function postTemplate({
               top: 0,
               left: 0,
               width: "100%",
-              height: "32px",
-              backgroundColor: c.primary,
-            }
-          }
+              height: "120px",
+              backgroundImage: `linear-gradient(to bottom, ${c.bg}, ${c.bg}00)`,
+            },
+          },
+        },
+        // Bottom
+        {
+          type: "div",
+          props: {
+            style: {
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              width: "100%",
+              height: "120px",
+              backgroundImage: `linear-gradient(to top, ${c.bg}, ${c.bg}00)`,
+            },
+          },
         },
 
-        // Main layout container
+        // Top bar
+        {
+          type: "div",
+          props: {
+            style: {
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "12px",
+              display: "flex",
+            },
+            children: [
+              { type: "div", props: { style: { flex: 1, backgroundColor: c.fg } } },
+              { type: "div", props: { style: { flex: 2, backgroundColor: c.muted } } },
+              { type: "div", props: { style: { flex: 1, backgroundColor: c.grid } } },
+            ],
+          },
+        },
+
+        // Content container
         {
           type: "div",
           props: {
             style: {
               display: "flex",
+              flexDirection: "column",
               width: "100%",
               height: "100%",
-              padding: "70px 100px", // Reduced padding to give content more room
+              padding: "100px 100px 80px",
+              justifyContent: "space-between",
               position: "relative",
             },
             children: [
-        // Left content box
+              // Top: date + tags
+              {
+                type: "div",
+                props: {
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "24px",
+                  },
+                  children: [
+                    {
+                      type: "div",
+                      props: {
+                        style: {
+                          fontSize: "26px",
+                          fontWeight: 700,
+                          color: c.muted,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                        },
+                        children: date || "LATEST POST",
+                      },
+                    },
+                    tags.length > 0 && {
+                      type: "div",
+                      props: {
+                        style: {
+                          width: "2px",
+                          height: "24px",
+                          backgroundColor: c.muted,
+                        },
+                      },
+                    },
+                    ...(tags.length > 0
+                      ? tags.slice(0, 3).map((tag) => ({
+                          type: "div",
+                          props: {
+                            style: {
+                              fontSize: "24px",
+                              fontWeight: 400,
+                              color: c.muted,
+                              letterSpacing: "0.05em",
+                            },
+                            children: `#${tag}`,
+                          },
+                        }))
+                      : []),
+                  ].filter(Boolean),
+                },
+              },
+
+              // Middle: title
               {
                 type: "div",
                 props: {
                   style: {
                     display: "flex",
                     flexDirection: "column",
-                    flex: 1,
-                    height: "100%",
-                    backgroundColor: c.bg,
-                    border: `4px solid ${c.fg}`,
-                    boxShadow: `20px 20px 0px ${c.primary}`, // Hard primary shadow
-                    padding: "40px 50px", // Reduced inner padding
-                    position: "relative",
+                    maxWidth: "960px",
                   },
                   children: [
-                    // Top row: Date & Tags
                     {
                       type: "div",
                       props: {
                         style: {
-                          display: "flex",
-                          flexDirection: "row", // Changed to row
-                          justifyContent: "space-between", // Spread date and tags
-                          alignItems: "center", // Center vertically
-                          width: "100%",
-                          marginBottom: "auto", 
+                          fontSize: `${titleSize}px`,
+                          fontWeight: 800,
+                          color: c.fg,
+                          lineHeight: 1.1,
+                          letterSpacing: "-0.04em",
                         },
-                        children: [
-                          {
-                            type: "div",
-                            props: {
-                              style: {
-                                fontSize: "20px",
-                                fontWeight: 700,
-                                color: c.muted,
-                                textTransform: "uppercase",
-                                letterSpacing: "0.15em",
-                              },
-                              children: date || "LATEST POST",
-                            }
-                          },
-                          tags.length > 0 && {
-                            type: "div",
-                            props: {
-                              style: {
-                                display: "flex",
-                                gap: "12px",
-                              },
-                              children: tags.slice(0, 3).map(tag => ({
-                                type: "div",
-                                props: {
-                                    style: {
-                                      fontSize: "18px",
-                                      fontWeight: 600,
-                                      color: c.bg,
-                                      padding: "6px 16px",
-                                      backgroundColor: c.primary,
-                                      borderRadius: 0, // Squared corners
-                                    },
-                                  children: tag,
-                                }
-                              }))
-                            }
-                          }
-                        ]
-                      }
+                        children: title,
+                      },
                     },
+                  ],
+                },
+              },
 
-                    // Title Container (takes up middle space)
+              // Bottom: divider + author / url
+              {
+                type: "div",
+                props: {
+                  style: {
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "24px",
+                  },
+                  children: [
+                    // Divider
                     {
                       type: "div",
                       props: {
                         style: {
-                          display: "flex",
-                          alignItems: "center",
-                          flex: 1,
-                          paddingTop: "20px",
-                          paddingBottom: "20px",
+                          width: "60px",
+                          height: "6px",
+                          backgroundColor: c.fg,
                         },
-                        children: [
-                          {
-                            type: "div",
-                            props: {
-                              style: {
-                                fontSize: `${titleSize}px`,
-                                fontWeight: 800,
-                                color: c.fg,
-                                lineHeight: 1.15, // Increased line-height for readability
-                                letterSpacing: "-0.04em",
-                                display: "flex",
-                                flexDirection: "column",
-                              },
-                              children: title,
-                            }
-                          }
-                        ]
-                      }
+                      },
                     },
-
-                    // Bottom row: Site URL & Author
+                    // Author + URL row
                     {
                       type: "div",
                       props: {
                         style: {
                           display: "flex",
                           justifyContent: "space-between",
-                          alignItems: "flex-end",
-                          borderTop: `2px dashed ${c.fg}`, // Changed to dashed
-                          paddingTop: "30px",
-                          marginTop: "auto",
+                          alignItems: "center",
                         },
                         children: [
                           {
                             type: "div",
                             props: {
                               style: {
-                                fontSize: "24px",
-                                fontWeight: 800,
-                                color: c.fg,
                                 display: "flex",
                                 alignItems: "center",
-                                gap: "16px",
+                                gap: "10px",
                               },
                               children: [
                                 {
                                   type: "div",
                                   props: {
                                     style: {
+                                      fontSize: "28px",
+                                      fontWeight: 400,
                                       color: c.muted,
-                                      fontSize: "20px",
-                                      fontWeight: 600,
-                                      marginRight: "6px",
                                     },
-                                    children: "by"
-                                  }
+                                    children: "by",
+                                  },
                                 },
-                                "Daniel Morales"
-                              ]
-                            }
+                                {
+                                  type: "div",
+                                  props: {
+                                    style: {
+                                      fontSize: "28px",
+                                      fontWeight: 700,
+                                      color: c.fg,
+                                    },
+                                    children: "Daniel Morales",
+                                  },
+                                },
+                              ],
+                            },
                           },
                           {
                             type: "div",
                             props: {
-                                style: {
-                                  fontSize: "22px",
-                                  fontWeight: 700,
-                                  color: c.primary,
-                                  textTransform: "uppercase",
-                                  letterSpacing: "0.05em",
-                                },
-                                children: siteUrl.replace("https://", ""),
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
+                              style: {
+                                fontSize: "26px",
+                                fontWeight: 700,
+                                color: c.muted,
+                                textTransform: "uppercase",
+                                letterSpacing: "0.1em",
+                              },
+                              children: siteUrl.replace("https://", ""),
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
       ],
     },
   } as unknown as ReactNode;
