@@ -259,7 +259,7 @@ export function postTemplate({
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "flex-end",
-                          borderTop: `2px solid ${c.fg}`, // Reduced to 2px
+                          borderTop: `2px dashed ${c.fg}`, // Changed to dashed
                           paddingTop: "30px",
                           marginTop: "auto",
                         },
