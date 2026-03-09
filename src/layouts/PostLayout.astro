@@ -64,10 +64,9 @@ const postWordCount = body ? getWordCount(body) : undefined;
 const postUrl = `${siteConfig.url}/blog/${slug}`;
 
 // OG image fallback chain: ogImage > coverImage > generated
-const postOgImage = ogImage || coverImage || `/blog/${slug}/og.png`;
-const postOgImageVersion = (updatedAt || publishedAt).toISOString();
+const postOgImage = ogImage || coverImage || `/blog/${slug}/index.png`;
 
-const linkedInShareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(postUrl)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(description)}`;
+const linkedInShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`;
 const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(title)}`;
 ---
 
@@ -78,7 +77,7 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
   publishedAt={publishedAt.toISOString()}
   updatedAt={updatedAt?.toISOString()}
   tags={tags}
-  image={`${postOgImage}?v=${encodeURIComponent(postOgImageVersion)}`}
+  image={postOgImage}
   imageAlt={socialTitle || title}
   canonicalUrl={canonicalUrl}
   socialTitle={socialTitle}
