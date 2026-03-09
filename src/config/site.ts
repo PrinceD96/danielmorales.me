@@ -21,6 +21,8 @@ export const siteConfig = {
     status: "in-progress" as const,
     url: undefined as string | undefined,
   },
+  ogImage: "/og.png",
+  dynamicOgImage: true,
   nav: [
     { label: "Blog", href: "/blog" },
     { label: "About", href: "/about" },

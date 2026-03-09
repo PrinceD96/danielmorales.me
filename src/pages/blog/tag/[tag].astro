@@ -34,9 +34,12 @@ const collectionItems = filtered.map((post, i) => ({
 
 const tagTitle = `Posts tagged "${tag}"`;
 const tagDescription = `Essays tagged "${tag}" — ${filtered.length} post${filtered.length === 1 ? "" : "s"}.`;
+
+// Noindex thin tag pages (fewer than 3 posts)
+const shouldNoindex = filtered.length < 3;
 ---
 
-<Layout title={tagTitle} description={tagDescription}>
+<Layout title={tagTitle} description={tagDescription} noindex={shouldNoindex}>
   <JsonLdCollection
     name={tagTitle}
     description={tagDescription}

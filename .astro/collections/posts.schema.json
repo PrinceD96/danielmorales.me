@@ -62,6 +62,9 @@
         "coverImage": {
           "type": "string"
         },
+        "ogImage": {
+          "type": "string"
+        },
         "featured": {
           "type": "boolean",
           "default": false

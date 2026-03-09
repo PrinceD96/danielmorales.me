@@ -9,7 +9,14 @@ export default defineConfig({
   integrations: [
     react(),
     mdx({ optimize: true }),
-    sitemap(),
+    sitemap({
+      filter: (page) => !page.includes("/blog/tag/"),
+      serialize: (item) => {
+        // Set lastmod for all pages
+        item.lastmod = new Date().toISOString();
+        return item;
+      },
+    }),
   ],
   vite: {
     plugins: [tailwindcss()],
