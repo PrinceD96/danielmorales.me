@@ -22,6 +22,7 @@ export const siteConfig = {
     url: undefined as string | undefined,
   },
   ogImage: "/og.png",
+  ogImageVersion: "2026-03-09",
   dynamicOgImage: true,
   nav: [
     { label: "Blog", href: "/blog" },

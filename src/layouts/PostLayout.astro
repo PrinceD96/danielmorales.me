@@ -65,6 +65,7 @@ const postUrl = `${siteConfig.url}/blog/${slug}`;
 
 // OG image fallback chain: ogImage > coverImage > generated
 const postOgImage = ogImage || coverImage || `/blog/${slug}/og.png`;
+const postOgImageVersion = (updatedAt || publishedAt).toISOString();
 
 const linkedInShareUrl = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(postUrl)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(description)}`;
 const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(title)}`;
@@ -77,7 +78,8 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
   publishedAt={publishedAt.toISOString()}
   updatedAt={updatedAt?.toISOString()}
   tags={tags}
-  image={postOgImage}
+  image={`${postOgImage}?v=${encodeURIComponent(postOgImageVersion)}`}
+  imageAlt={socialTitle || title}
   canonicalUrl={canonicalUrl}
   socialTitle={socialTitle}
   socialDescription={socialDescription}
@@ -88,7 +90,7 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
     publishedAt={publishedAt.toISOString()}
     updatedAt={updatedAt?.toISOString()}
     tags={tags}
-    image={coverImage}
+    image={postOgImage}
     slug={slug}
     wordCount={postWordCount}
   />
