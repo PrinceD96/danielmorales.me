@@ -27,6 +27,7 @@ export async function GET({ props }: APIContext) {
   }
 
   const date = post.data.publishedAt.toLocaleDateString("en-US", {
+    timeZone: "UTC",
     year: "numeric",
     month: "short",
     day: "numeric",
