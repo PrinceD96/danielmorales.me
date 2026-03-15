@@ -11,6 +11,7 @@ import X from "@/components/icons/X.astro";
 import LinkedIn from "@/components/icons/LinkedIn.astro";
 import Email from "@/components/icons/Email.astro";
 import RSS from "@/components/icons/RSS.astro";
+import JsonLdProfilePage from "@/components/seo/JsonLdProfilePage.astro";
 
 const posts = await getCollection("posts", ({ data }) => {
   return import.meta.env.PROD ? !data.draft : true;
@@ -24,11 +25,12 @@ const recentPosts = sorted.slice(0, 10);
 ---
 
 <Layout
-  title="Software Engineer, Entrepreneur & Product Builder"
+  title="Lead Software Engineer, Entrepreneur, and Product Builder"
   socialTitle="Software engineer, entrepreneur, product builder"
-  description="I'm a software engineer and entrepreneur. I write about building products, making engineering decisions, and shipping things that are actually useful."
-  socialDescription="I build software products and write about what I learn — engineering decisions, shipping strategies, and lessons from the trenches."
+  description="Daniel Morales is a lead software engineer and entrepreneur writing essays on SaaS, mobile apps, AI, engineering decisions, and building useful software products."
+  socialDescription="Lead software engineer and entrepreneur writing about SaaS, mobile apps, AI, and the engineering decisions behind useful software products."
 >
+  <JsonLdProfilePage />
   <!-- Intro -->
   <section class="pb-4 sm:pb-6">
     <div class="mx-auto max-w-4xl px-6">
@@ -50,9 +52,26 @@ const recentPosts = sorted.slice(0, 10);
           <h1 class="text-3xl font-bold sm:text-4xl">
             Hi, I'm {siteConfig.name.split(" ")[0]}.
           </h1>
-          <p class="mt-3 max-w-lg leading-relaxed text-muted-foreground">
-            {siteConfig.description}
+          <p class="mt-3 max-w-2xl leading-relaxed text-muted-foreground">
+            Lead software engineer, entrepreneur, and product builder writing essays on SaaS,
+            mobile apps, AI, and the engineering decisions behind useful software.
           </p>
+          <div class="mt-5 flex flex-wrap items-center justify-center gap-4 sm:justify-start">
+            <a
+              href="/blog"
+              class="text-sm text-foreground transition-colors hover:text-primary"
+              data-sound="click"
+            >
+              Read the blog
+            </a>
+            <a
+              href="/about"
+              class="text-sm text-muted-foreground transition-colors hover:text-primary"
+              data-sound="click"
+            >
+              About Daniel
+            </a>
+          </div>
           <div class="mt-4 flex items-center justify-center gap-1 sm:justify-start">
             <a href={siteConfig.social.github} target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub" data-sound="click" data-sound-hover="hover-tick">
               <GitHub size={18} />

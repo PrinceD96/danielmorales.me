@@ -16,6 +16,11 @@ import { siteConfig } from "@/config/site";
         jobTitle: "Lead Software Engineer",
         description:
           "Software engineer with 9+ years of experience and serial entrepreneur. Builds SaaS and mobile app products.",
+        sameAs: [
+          siteConfig.social.github,
+          siteConfig.social.linkedin,
+          siteConfig.social.x,
+        ],
         knowsAbout: [
           "Software Engineering",
           "Web Development",
@@ -26,11 +31,6 @@ import { siteConfig } from "@/config/site";
           "React",
           "TypeScript",
         ],
-        sameAs: [
-          siteConfig.social.github,
-          siteConfig.social.linkedin,
-          siteConfig.social.x,
-        ],
       },
       {
         "@type": "WebSite",
@@ -38,7 +38,11 @@ import { siteConfig } from "@/config/site";
         url: siteConfig.url,
         name: siteConfig.name,
         description: siteConfig.description,
+        inLanguage: "en-US",
         publisher: {
+          "@id": `${siteConfig.url}/#person`,
+        },
+        mainEntity: {
           "@id": `${siteConfig.url}/#person`,
         },
       },

@@ -32,24 +32,30 @@ const collectionItems = filtered.map((post, i) => ({
   url: `${siteConfig.url}/blog/${post.id}`,
   position: i + 1,
 }));
+const encodedTag = encodeURIComponent(tag);
 
 const tagTitle = `Posts tagged "${tag}"`;
 const tagDescription = `Essays tagged "${tag}" — ${filtered.length} post${filtered.length === 1 ? "" : "s"}.`;
 
 // Noindex thin tag pages (fewer than 3 posts)
-const shouldNoindex = filtered.length < 3;
+const robotsDirective = filtered.length < 3 ? "noindex,follow" : "index,follow";
 ---
 
-<Layout title={tagTitle} description={tagDescription} noindex={shouldNoindex}>
+<Layout
+  title={tagTitle}
+  description={tagDescription}
+  robotsDirective={robotsDirective}
+>
   <JsonLdCollection
     name={tagTitle}
     description={tagDescription}
     items={collectionItems}
+    url={`${siteConfig.url}/blog/tag/${encodedTag}`}
   />
   <JsonLdBreadcrumb
     items={[
       { name: "Blog", url: "/blog" },
-      { name: `# ${tag}`, url: `/blog/tag/${tag}` },
+      { name: `# ${tag}`, url: `/blog/tag/${encodedTag}` },
     ]}
   />
 

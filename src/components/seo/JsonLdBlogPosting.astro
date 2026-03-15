@@ -7,13 +7,16 @@ interface Props {
   publishedAt: string;
   updatedAt?: string;
   tags?: string[];
+  keywords?: string[];
   image?: string;
   slug: string;
   wordCount?: number;
 }
 
-const { title, description, publishedAt, updatedAt, tags, image, slug, wordCount } = Astro.props;
+const { title, description, publishedAt, updatedAt, tags, keywords, image, slug, wordCount } =
+  Astro.props;
 const url = `${siteConfig.url}/blog/${slug}`;
+const schemaKeywords = keywords?.length ? keywords : tags;
 ---
 
 <script
@@ -32,16 +35,20 @@ const url = `${siteConfig.url}/blog/${slug}`;
     datePublished: publishedAt,
     ...(updatedAt && { dateModified: updatedAt }),
     ...(image && { image: new URL(image, siteConfig.url).href }),
-    ...(tags && { keywords: tags.join(", ") }),
+    ...(schemaKeywords?.length && { keywords: schemaKeywords.join(", ") }),
     ...(wordCount && { wordCount }),
+    inLanguage: "en-US",
     author: {
       "@type": "Person",
       "@id": `${siteConfig.url}/#person`,
       name: siteConfig.author.name,
+      url: siteConfig.author.url,
     },
     publisher: {
       "@type": "Person",
       "@id": `${siteConfig.url}/#person`,
+      name: siteConfig.author.name,
+      url: siteConfig.author.url,
     },
     isPartOf: {
       "@id": `${siteConfig.url}/#website`,

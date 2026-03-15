@@ -19,7 +19,7 @@ interface Props {
   canonicalUrl?: string;
   socialTitle?: string;
   socialDescription?: string;
-  noindex?: boolean;
+  robotsDirective?: "index,follow" | "noindex,follow" | "noindex,nofollow";
 }
 
 const props = Astro.props;

@@ -13,7 +13,7 @@ interface Props {
   canonicalUrl?: string;
   socialTitle?: string;
   socialDescription?: string;
-  noindex?: boolean;
+  robotsDirective?: "index,follow" | "noindex,follow" | "noindex,nofollow";
 }
 
 const {
@@ -28,7 +28,7 @@ const {
   canonicalUrl,
   socialTitle,
   socialDescription,
-  noindex = false,
+  robotsDirective = "index,follow",
 } = Astro.props;
 
 const withVersion = (url: string, version?: string) => {
@@ -49,18 +49,23 @@ const ogImage = image
   : withVersion(siteConfig.ogImage, siteConfig.ogImageVersion);
 const ogImageAlt = imageAlt || ogTitle;
 const canonical = canonicalUrl || new URL(Astro.url.pathname, siteConfig.url).href;
-
-// noindex on non-production environments
 const isProduction = import.meta.env.PROD;
-const shouldNoindex = noindex || !isProduction;
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
+const effectiveRobotsDirective = isProduction ? robotsDirective : "noindex,nofollow";
+const robotsContent =
+  effectiveRobotsDirective === "index,follow"
+    ? "index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1"
+    : effectiveRobotsDirective;
 ---
 
 <title>{pageTitle}</title>
 <meta name="description" content={ogDescription} />
 <meta name="author" content={siteConfig.author.name} />
 <link rel="canonical" href={canonical} />
-
-{shouldNoindex && <meta name="robots" content="noindex, nofollow" />}
+<meta name="robots" content={robotsContent} />
+{googleSiteVerification && (
+  <meta name="google-site-verification" content={googleSiteVerification} />
+)}
 
 <!-- Open Graph -->
 <meta property="og:type" content={type} />

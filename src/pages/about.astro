@@ -1,8 +1,15 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import JsonLdAboutPage from "@/components/seo/JsonLdAboutPage.astro";
+import JsonLdBreadcrumb from "@/components/seo/JsonLdBreadcrumb.astro";
 ---
 
-<Layout title="About" description="About Daniel Morales — lead software engineer with 9+ years of experience, serial entrepreneur, and product builder.">
+<Layout
+  title="About"
+  description="About Daniel Morales, a lead software engineer with 9+ years of experience and a serial entrepreneur building SaaS, mobile apps, and AI products."
+>
+  <JsonLdAboutPage />
+  <JsonLdBreadcrumb items={[{ name: "About", url: "/about" }]} />
   <section class="pb-8 sm:pb-10">
     <div class="mx-auto max-w-4xl px-6">
       <h1 class="mb-8 text-3xl font-bold sm:text-4xl">About Daniel Morales</h1>
@@ -15,14 +22,15 @@ import Layout from "@/layouts/Layout.astro";
 
       <div class="space-y-4 leading-relaxed text-muted-foreground">
         <p>
-          I&rsquo;m Daniel Morales&thinsp;&mdash;&thinsp;a lead software engineer with over 9 years of experience
-          and a serial entrepreneur with 7+ years of building and running businesses. This site is where I write about
-          what I learn&thinsp;&mdash;&thinsp;engineering decisions, product thinking, and the craft of shipping useful software.
+          I&rsquo;m Daniel Morales&thinsp;&mdash;&thinsp;a lead software engineer with over 9 years of experience,
+          a serial entrepreneur with 7+ years of building businesses, and a product builder focused on SaaS,
+          mobile apps, and AI. This site is where I write about what I learn&thinsp;&mdash;&thinsp;engineering decisions,
+          product thinking, and the craft of shipping useful software.
         </p>
         <p>
           I&rsquo;ve been a foundational engineer and a lead engineer, building products from the ground up and
-          guiding teams through complex technical decisions. My work spans web apps, mobile apps, and AI&thinsp;&mdash;&thinsp;and
-          I&rsquo;m passionate about all three.
+          guiding teams through complex technical decisions. My work spans web apps, mobile apps, and AI,
+          and I care about turning technical depth into products people actually use.
         </p>
         <p>
           Outside of my day job, I build SaaS and mobile app products. I believe the best way to learn is to
@@ -34,6 +42,9 @@ import Layout from "@/layouts/Layout.astro";
           The essays here cover engineering decisions, product development, AI, and what it takes to ship
           software that people actually use. I write from experience&thinsp;&mdash;&thinsp;every post comes from
           something I&rsquo;ve built, shipped, or learned the hard way.
+        </p>
+        <p>
+          If you want the practical version, start with the <a href="/blog" class="text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-primary">blog</a>.
         </p>
       </div>
     </div>

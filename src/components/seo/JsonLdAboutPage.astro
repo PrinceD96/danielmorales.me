@@ -1,0 +1,24 @@
+---
+import { siteConfig } from "@/config/site";
+---
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "@id": `${siteConfig.url}/about/#about-page`,
+    url: `${siteConfig.url}/about`,
+    name: "About Daniel Morales",
+    description:
+      "Background on Daniel Morales, a lead software engineer and serial entrepreneur building SaaS, mobile apps, and AI products.",
+    inLanguage: "en-US",
+    mainEntity: {
+      "@id": `${siteConfig.url}/#person`,
+    },
+    isPartOf: {
+      "@id": `${siteConfig.url}/#website`,
+    },
+  })}
+/>

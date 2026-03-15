@@ -1,0 +1,45 @@
+---
+import { siteConfig } from "@/config/site";
+---
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "@id": `${siteConfig.url}/#profile-page`,
+    url: siteConfig.url,
+    name: "Daniel Morales | Lead Software Engineer, Entrepreneur, and Product Builder",
+    description:
+      "Personal site of Daniel Morales, a lead software engineer and entrepreneur writing about SaaS, mobile apps, AI, and engineering decisions.",
+    inLanguage: "en-US",
+    mainEntity: {
+      "@id": `${siteConfig.url}/#person`,
+    },
+    isPartOf: {
+      "@id": `${siteConfig.url}/#website`,
+    },
+    breadcrumb: {
+      "@id": `${siteConfig.url}/#homepage-breadcrumb`,
+    },
+  })}
+/>
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${siteConfig.url}/#homepage-breadcrumb`,
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteConfig.url,
+      },
+    ],
+  })}
+/>

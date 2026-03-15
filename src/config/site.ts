@@ -2,7 +2,7 @@ export const siteConfig = {
   name: "Daniel Morales",
   title: "Daniel Morales",
   description:
-    "I build software products and write about what I learn along the way.",
+    "I'm a lead software engineer and entrepreneur building software products, and I write about SaaS, mobile apps, AI, and engineering decisions.",
   url: "https://danielmorales.me",
   author: {
     name: "Daniel Morales",

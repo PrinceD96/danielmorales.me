@@ -20,6 +20,7 @@ interface Props {
   publishedAt: Date;
   updatedAt?: Date;
   tags?: string[];
+  keywords?: string[];
   coverImage?: string;
   ogImage?: string;
   slug: string;
@@ -37,6 +38,7 @@ const {
   publishedAt,
   updatedAt,
   tags,
+  keywords,
   coverImage,
   ogImage,
   slug,
@@ -90,6 +92,7 @@ const xShareUrl = `https://x.com/intent/tweet?url=${encodeURIComponent(postUrl)}
     publishedAt={publishedAt.toISOString()}
     updatedAt={updatedAt?.toISOString()}
     tags={tags}
+    keywords={keywords}
     image={postOgImage}
     slug={slug}
     wordCount={postWordCount}

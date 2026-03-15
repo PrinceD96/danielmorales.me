@@ -9,11 +9,6 @@ export default defineConfig({
     mdx({ optimize: true }),
     sitemap({
       filter: (page) => !page.includes("/blog/tag/"),
-      serialize: (item) => {
-        // Set lastmod for all pages
-        item.lastmod = new Date().toISOString();
-        return item;
-      },
     }),
   ],
   vite: {
