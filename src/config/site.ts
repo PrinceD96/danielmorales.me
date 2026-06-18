@@ -12,7 +12,7 @@ export const siteConfig = {
   social: {
     github: "https://github.com/PrinceD96",
     x: "https://x.com/Princedany96",
-    linkedin: "https://linkedin.com/in/daniel-morales-s96",
+    linkedin: "https://www.linkedin.com/in/daniel-morales-eng/",
     email: "hello@danielmorales.me",
   },
   currentlyBuilding: {
